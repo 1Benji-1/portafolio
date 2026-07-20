@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "portfolio": "Portfolio",
+    "contact": "Contact"
+  },
+  "home": {
+    "role1": "Full-Stack",
+    "role2": "Developer",
+    "words": ["Mobile & Web Apps", "Clean Architecture", "AI Integration"],
+    "description": "I build cross-platform mobile apps and full-stack web products end-to-end — from Flutter frontends to FastAPI/Node JS backends — applying Clean Architecture and modern best practices.",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "about": {
+    "title": "About Me",
+    "subtitle": "Transforming complex logic into efficient systems",
+    "greeting": "Hello, I'm",
+    "description": "Backend Developer focused on building scalable systems, automation, and efficient architectures. I specialize in developing APIs, microservices, and robust solutions using technologies like Python, Node.js, and databases such as PostgreSQL. I'm passionate about optimization, systems logic, and integrating intelligent solutions.",
+    "quote": "Building invisible, yet unbreakable systems.",
+    "downloadCv": "Download CV",
+    "viewProjects": "View Projects",
+    "stats": {
+      "projects": "Total Projects",
+      "projectsDesc": "Innovative web solutions crafted",
+      "certificates": "Certificates",
+      "certificatesDesc": "Professional skills validated",
+      "experience": "Years of Experience",
+      "experienceDesc": "Continuous learning journey"
+    }
+  },
+  "portfolio": {
+    "title": "Portfolio Showcase",
+    "subtitle": "Explore my journey through projects, certifications, and technical expertise. Each section represents a milestone in my continuous learning path.",
+    "seeMore": "See More",
+    "seeLess": "See Less",
+    "tabs": {
+      "projects": "Projects",
+      "certificates": "Certificates",
+      "techStack": "Tech Stack"
+    }
+  },
+  "contact": {
+    "title": "Contact me",
+    "subtitle": "Do you have any questions or projects in mind? Send me a message and I'll get back to you as soon as possible.",
+    "cardTitle": "Contact",
+    "cardSubtitle": "Anything to discuss? Send me an email and let's talk.",
+    "form": {
+      "name": "Name",
+      "email": "Mail",
+      "message": "Message",
+      "send": "Send Message",
+      "sending": "Sending..."
+    }
+  }
+}

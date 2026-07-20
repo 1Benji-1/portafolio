@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "portfolio": "Portafolio",
+    "contact": "Contacto"
+  },
+  "home": {
+    "role1": "Desarrollador",
+    "role2": "Full-Stack",
+    "words": ["Apps Móviles y Web", "Arquitectura Limpia", "Integración de IA"],
+    "description": "Construyo aplicaciones móviles multiplataforma y productos web full-stack de principio a fin — desde frontends en Flutter hasta backends en FastAPI/Node JS — aplicando Clean Architecture y buenas prácticas modernas.",
+    "projects": "Proyectos",
+    "contact": "Contacto"
+  },
+  "about": {
+    "title": "Sobre Mí",
+    "subtitle": "Transformando lógica compleja en sistemas eficientes",
+    "greeting": "Hola, soy",
+    "description": "Desarrollador Backend enfocado en construir sistemas escalables, automatización y arquitecturas eficientes. Me especializo en el desarrollo de APIs, microservicios y soluciones robustas usando tecnologías como Python, Node.js y bases de datos como PostgreSQL. Me apasiona la optimización, la lógica de sistemas y la integración de soluciones inteligentes.",
+    "quote": "Construyendo sistemas invisibles, pero irrompibles.",
+    "downloadCv": "Descargar CV",
+    "viewProjects": "Ver Proyectos",
+    "stats": {
+      "projects": "Proyectos Totales",
+      "projectsDesc": "Soluciones web innovadoras creadas",
+      "certificates": "Certificados",
+      "certificatesDesc": "Habilidades profesionales validadas",
+      "experience": "Años de Experiencia",
+      "experienceDesc": "Aprendizaje continuo"
+    }
+  },
+  "portfolio": {
+    "title": "Mi Portafolio",
+    "subtitle": "Explora mi trayectoria a través de proyectos, certificaciones y experiencia técnica. Cada sección representa un hito en mi camino de aprendizaje continuo.",
+    "seeMore": "Ver Más",
+    "seeLess": "Ver Menos",
+    "tabs": {
+      "projects": "Proyectos",
+      "certificates": "Certificados",
+      "techStack": "Tecnologías"
+    }
+  },
+  "contact": {
+    "title": "Contáctame",
+    "subtitle": "¿Tienes alguna pregunta o proyecto en mente? Envíame un mensaje y te responderé lo antes posible.",
+    "cardTitle": "Contacto",
+    "cardSubtitle": "¿Algo que discutir? Envíame un correo y hablemos.",
+    "form": {
+      "name": "Nombre",
+      "email": "Correo",
+      "message": "Mensaje",
+      "send": "Enviar Mensaje",
+      "sending": "Enviando..."
+    }
+  }
+}

@@ -9,13 +9,13 @@
 	  font-family: "Poppins", system-ui, sans-serif;
 	scroll-behavior: smooth;
 	scrollbar-width: thin;
-	scrollbar-color: rgba(99, 102, 241, 0.3) rgba(12, 5, 53, 0.356);
+	scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.5);
 }
 
 html,
 body {
 	overflow-x: hidden;
-	background: #030014;
+	background: #000000;
 	scroll-behavior: smooth !important;
 }
 

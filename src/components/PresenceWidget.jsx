@@ -5,6 +5,7 @@ export default function PresenceWidget() {
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
+    /*
     const fetchPresence = async () => {
       try {
         const res = await fetch("http://localhost:3001/api/presence");
@@ -54,7 +55,7 @@ export default function PresenceWidget() {
 
     fetchPresence();
     const interval = setInterval(fetchPresence, 5000);
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); */
   }, []);
 
   if (!activities.length) return null;
