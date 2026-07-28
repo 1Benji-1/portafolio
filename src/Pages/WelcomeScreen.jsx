@@ -160,7 +160,7 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
                 data-aos-delay="1200"
               >
                 <a
-                  href="https://comrad.com"
+                  href="https://iscomrad.vercel.app"
                   className="inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full relative group hover:scale-105 transition-transform duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -169,7 +169,7 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
                   <div className="relative flex items-center gap-2 text-lg sm:text-xl md:text-2xl">
                     <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-400" />
                     <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
-                      <TypewriterEffect text="comrad.com" startDelay={1300} speed={120} />
+                      <TypewriterEffect text="iscomrad.app" startDelay={1300} speed={120} />
                     </span>
                   </div>
                 </a>
