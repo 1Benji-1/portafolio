@@ -8,31 +8,35 @@
   "home": {
     "role1": "Desarrollador",
     "role2": "Full-Stack",
-    "words": ["Apps Móviles y Web", "Arquitectura Limpia", "Integración de IA"],
-    "description": "Construyo aplicaciones móviles multiplataforma y productos web full-stack de principio a fin — desde frontends en Flutter hasta backends en FastAPI/Node JS — aplicando Clean Architecture y buenas prácticas modernas.",
+    "words": [
+      "Sistemas Web Escalables",
+      "Infraestructura Cloud",
+      "Desarrollo de APIs"
+    ],
+    "description": "Construyo aplicaciones full-stack de alto rendimiento orientadas a la escalabilidad. Desde arquitecturas backend robustas en Node.js y Python, hasta interfaces dinámicas en Next.js, entrego soluciones de principio a fin que generan valor real.",
     "projects": "Proyectos",
     "contact": "Contacto"
   },
   "about": {
     "title": "Sobre Mí",
-    "subtitle": "Transformando lógica compleja en sistemas eficientes",
-    "greeting": "Hola, soy",
-    "description": "Desarrollador Backend enfocado en construir sistemas escalables, automatización y arquitecturas eficientes. Me especializo en el desarrollo de APIs, microservicios y soluciones robustas usando tecnologías como Python, Node.js y bases de datos como PostgreSQL. Me apasiona la optimización, la lógica de sistemas y la integración de soluciones inteligentes.",
-    "quote": "Construyendo sistemas invisibles, pero irrompibles.",
+    "subtitle": "Diseñando soluciones precisas para lógica de negocio compleja",
+    "greeting": "Hola, soy Yoel,",
+    "description": "Soy un Desarrollador Full-Stack con una sólida mentalidad de ingeniería, enfocado en la lógica de sistemas y la optimización de rendimiento. Me especializo en estructurar aplicaciones web escalables, diseñar bases de datos relacionales eficientes con PostgreSQL y desplegar soluciones en la nube con AWS y Vercel. Disfruto transformar requerimientos técnicos complejos en productos digitales fluidos y de alto rendimiento.",
+    "quote": "Entregando software confiable a través de principios sólidos de ingeniería.",
     "downloadCv": "Descargar CV",
     "viewProjects": "Ver Proyectos",
     "stats": {
-      "projects": "Proyectos Totales",
-      "projectsDesc": "Soluciones web innovadoras creadas",
-      "certificates": "Certificados",
-      "certificatesDesc": "Habilidades profesionales validadas",
-      "experience": "Años de Experiencia",
-      "experienceDesc": "Aprendizaje continuo"
+      "projects": "Apps en Producción",
+      "projectsDesc": "Soluciones completas desplegadas",
+      "certificates": "Certificaciones",
+      "certificatesDesc": "Crecimiento técnico continuo",
+      "experience": "Años programando",
+      "experienceDesc": "Resolviendo problemas complejos"
     }
   },
   "portfolio": {
     "title": "Mi Portafolio",
-    "subtitle": "Explora mi trayectoria a través de proyectos, certificaciones y experiencia técnica. Cada sección representa un hito en mi camino de aprendizaje continuo.",
+    "subtitle": "Un desglose técnico de mi trabajo reciente, destacando decisiones de arquitectura, modelado de bases de datos y despliegues en la nube.",
     "seeMore": "Ver Más",
     "seeLess": "Ver Menos",
     "tabs": {
@@ -42,14 +46,14 @@
     }
   },
   "contact": {
-    "title": "Contáctame",
-    "subtitle": "¿Tienes alguna pregunta o proyecto en mente? Envíame un mensaje y te responderé lo antes posible.",
-    "cardTitle": "Contacto",
-    "cardSubtitle": "¿Algo que discutir? Envíame un correo y hablemos.",
+    "title": "Hablemos",
+    "subtitle": "Ya sea que tengas un problema técnico complejo por resolver o un proyecto en mente, estoy listo para ayudarte a construirlo.",
+    "cardTitle": "Contáctame",
+    "cardSubtitle": "Envíame un correo y discutamos los requerimientos de tu sistema.",
     "form": {
       "name": "Nombre",
       "email": "Correo",
-      "message": "Mensaje",
+      "message": "Detalles del proyecto o mensaje",
       "send": "Enviar Mensaje",
       "sending": "Enviando..."
     }

@@ -67,9 +67,9 @@ const SocialLink = memo(({ icon: Icon, link, label }) => (
 const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;
-const TECH_STACK = ["Flutter", "Python", "Node JS", "PostgreSQL", "TypeScript", "FastAPI"];
+const TECH_STACK = ["Flutter", "Python", "Node JS", "PostgreSQL", "TypeScript", "React"];
 const SOCIAL_LINKS = [
-  { icon: Github, link: "https://github.com/bulacia-yoel", label: "GitHub Profile" },
+  { icon: Github, link: "https://github.com/1Benji-1", label: "GitHub Profile" },
   { icon: Linkedin, link: "https://www.linkedin.com/in/bulacia-yoel/", label: "LinkedIn Profile" },
   { icon: Instagram, link: "https://www.instagram.com/bulacia_yoel/?hl=id", label: "Instagram Profile" }
 ];

@@ -103,18 +103,25 @@ function a11yProps(index) {
 }
 
 const techStacks = [
+  // Lenguajes Core
+  { icon: "typescript.svg", language: "TypeScript" },
+  { icon: "flutter.svg", language: "Flutter" },
   { icon: "python.svg", language: "Python" },
-  { icon: "cplusplus.svg", language: "C++" },
-  { icon: "javascript.svg", language: "JavaScript" },
+
+  // Frontend
+  { icon: "reactjs.svg", language: "React" },
+  { icon: "nextjs.svg", language: "Next.js" },
+  { icon: "tailwind.svg", language: "Tailwind CSS" },
+
+  // Backend & Base de Datos
   { icon: "nodejs.svg", language: "Node JS" },
-  { icon: "django.svg", language: "Django" },
   { icon: "postgresql.svg", language: "PostgreSQL" },
-  { icon: "mysql.svg", language: "MySQL" },
-  { icon: "git.svg", language: "Git" },
-  { icon: "github.svg", language: "GitHub" },
-  { icon: "linux.svg", language: "Linux" },
+  { icon: "supabase.svg", language: "Supabase" },
+
+  // Infraestructura, Despliegue & Nube
   { icon: "docker.svg", language: "Docker" },
-  { icon: "postman.svg", language: "Postman" },
+  { icon: "vercel.svg", language: "Vercel" },
+  { icon: "aws.svg", language: "AWS" },
 ];
 
 export default function FullWidthTabs() {
