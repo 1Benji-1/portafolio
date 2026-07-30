@@ -1,67 +1,80 @@
-# Portfolio V5
+# Comrad
 
-Hello everyone\! 👋
+¡Hola a todos! 👋
 
-Let me introduce myself, I'm **Eki Zulfar Rachman**. On this occasion, I'd like to share the portfolio website project that I've developed. built with React and Supabase, featuring a public-facing site and an admin dashboard.
+Permíteme presentarme. Soy **Yoel Bulacia**. En esta ocasión quiero compartir el proyecto **Comrad**, una aplicación web desarrollada con React y Supabase que cuenta con un sitio público y un panel de administración.
 
-**Live Demo:** [https://ekizr.com](https://ekizr.com)
-
----
-
-## 🛠️ Tech Stack
-
-This project is built using modern web technologies:
-
-  - **ReactJS** - Frontend framework
-  - **Tailwind CSS** - Utility-first CSS framework
-  - **Supabase** - Backend for portfolio data, certificates, and comment system
-  - **AOS** - Animate On Scroll library
-  - **Framer Motion** - Animation library
-  - **Lucide** - Icon library
-  - **Material UI** - React component library
-  - **SweetAlert2** - Beautiful alert dialogs
+**🌐 Demo en vivo:** https://iscomrad.vercel.app
 
 ---
 
-## User Roles
+# 🛠️ Tecnologías Utilizadas
 
-| Role | Access |
-|---|---|
-| **Visitor (Public)** | View projects, certificates, and comments — leave a comment |
-| **Admin** | Login to dashboard — full CRUD on projects & certificates — delete & pin/unpin comments |
+Este proyecto fue desarrollado utilizando tecnologías web modernas:
+
+- **ReactJS** - Framework para el frontend.
+- **Tailwind CSS** - Framework CSS basado en utilidades.
+- **Supabase** - Backend para la gestión de datos, certificados y sistema de comentarios.
+- **AOS** - Biblioteca para animaciones al hacer scroll.
+- **Framer Motion** - Biblioteca de animaciones para React.
+- **Lucide** - Biblioteca de iconos.
+- **Material UI** - Biblioteca de componentes para React.
+- **SweetAlert2** - Alertas modernas e interactivas.
 
 ---
 
-## Getting Started
+# Roles de Usuario
 
-### Prerequisites
+| Rol | Acceso |
+|------|---------|
+| **Visitante** | Puede visualizar proyectos, certificados y comentarios, además de dejar un comentario. |
+| **Administrador** | Acceso al panel de administración con CRUD completo de proyectos y certificados, además de eliminar, fijar y desfijar comentarios. |
+
+---
+
+# 🚀 Primeros Pasos
+
+## Requisitos Previos
 
 - Node.js `>= 14.x`
-- npm or yarn
+- npm o yarn
 
-### 1. Clone & Install
+---
+
+## 1. Clonar e instalar
 
 ```bash
-git clone https://github.com/EkiZR/Portofolio_V5.git
-cd Portofolio_V5
+git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git
+cd TU_REPOSITORIO
 npm install
 ```
 
-> If you encounter peer dependency issues: `npm install --legacy-peer-deps`
+> Si aparecen problemas de dependencias ejecuta:
 
-### 2. Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-VITE_SUPABASE_URL=your-supabase-project-url
-VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```bash
+npm install --legacy-peer-deps
 ```
 
-> Find these in your Supabase project under **Settings → API**.  
-> ⚠️ Never commit `.env` to version control — make sure it's in `.gitignore`.
+---
 
-### 3. Supabase Client (`src/supabase.js`)
+## 2. Variables de Entorno
+
+Crea un archivo `.env` en la raíz del proyecto:
+
+```env
+VITE_SUPABASE_URL=tu-url-de-supabase
+VITE_SUPABASE_ANON_KEY=tu-anon-key-de-supabase
+```
+
+Puedes obtener estos datos desde:
+
+**Supabase → Settings → API**
+
+⚠️ **Nunca subas el archivo `.env` al repositorio.** Asegúrate de incluirlo en `.gitignore`.
+
+---
+
+## 3. Configuración de Supabase (`src/supabase.js`)
 
 ```javascript
 import { createClient } from '@supabase/supabase-js'
@@ -70,15 +83,21 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Supabase credentials missing. Check your .env file.')
+  throw new Error('Faltan las credenciales de Supabase. Revisa tu archivo .env.')
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey)
 ```
 
-### 4. Database Setup
+---
 
-Go to your Supabase project → **SQL Editor** → run the script below (run once):
+## 4. Configuración de la Base de Datos
+
+Abre tu proyecto en Supabase y dirígete a:
+
+**SQL Editor**
+
+Ejecuta el siguiente script **una sola vez**:
 
 ```sql
 -- ============================
@@ -208,72 +227,115 @@ ON storage.objects FOR SELECT
 USING (bucket_id = 'certificate-images');
 ```
 
-### 5. Enable Realtime (Comments)
+---
 
-Go to **Table Editor → portfolio_comments → Enable Realtime**.
+## 5. Habilitar Realtime
 
-### 6. Create Admin Account
+Ve a:
 
-**Step 1** — Go to **Authentication → Users → Add User** in Supabase Dashboard, then copy the generated User ID.
+**Table Editor → portfolio_comments → Enable Realtime**
 
-**Step 2** — Run this in the SQL Editor (replace `USER_UUID` with the copied ID):
+---
+
+## 6. Crear una Cuenta de Administrador
+
+### Paso 1
+
+En Supabase abre:
+
+**Authentication → Users → Add User**
+
+Copia el **User ID** generado.
+
+### Paso 2
+
+Ejecuta el siguiente SQL reemplazando `USER_UUID` por el ID copiado.
 
 ```sql
 INSERT INTO public.profiles (id, username, role)
-VALUES ('USER_UUID', 'eki', 'admin');
+VALUES ('USER_UUID', 'admin', 'admin');
 ```
 
-### 7. Run Locally
+---
+
+## 7. Ejecutar el Proyecto
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:5173` in your browser.
+Abre:
+
+```
+http://localhost:5173
+```
 
 ---
 
-## Pages & Features
+# 📄 Páginas y Funcionalidades
 
-### Public (Visitor)
-- **Home** — Hero section, about, skills
-- **Projects** — List of published projects with detail modal
-- **Certificates** — Certificate gallery
-- **Comments** — View all comments, submit a new comment with name and optional profile photo
+## Sitio Público
 
-### Admin (Dashboard)
-- **Login Page** — Email & password authentication via Supabase Auth
-- **Dashboard** — Overview panel after login
-- **Projects** — Create, edit, delete projects; manage image, links, features, tech stack, publish status, and order
-- **Certificates** — Upload and delete certificate images
-- **Comments** — View all comments; pin/unpin for highlighting; delete inappropriate comments
+- Inicio con presentación personal.
+- Sección "Sobre mí".
+- Habilidades.
+- Lista de proyectos publicados.
+- Modal con detalles de cada proyecto.
+- Galería de certificados.
+- Sistema de comentarios.
+- Posibilidad de comentar con nombre y foto de perfil opcional.
 
 ---
 
-## Build for Production
+## Panel de Administración
+
+- Inicio de sesión mediante Supabase Auth.
+- Dashboard principal.
+- Gestión completa de proyectos.
+- Crear, editar y eliminar proyectos.
+- Administración de imágenes.
+- Gestión de enlaces, tecnologías y características.
+- Publicar u ocultar proyectos.
+- Ordenar proyectos.
+- Subir y eliminar certificados.
+- Ver todos los comentarios.
+- Fijar o desfijar comentarios destacados.
+- Eliminar comentarios inapropiados.
+
+---
+
+# 📦 Compilar para Producción
 
 ```bash
 npm run build
 ```
 
-Upload the contents of the `dist/` folder to your hosting provider.
+Sube el contenido de la carpeta:
+
+```
+dist/
+```
+
+a tu proveedor de hosting preferido.
 
 ---
 
-## Troubleshooting
+# 🛠️ Solución de Problemas
 
-- Ensure Node.js is installed and you're in the correct directory.
-- Double-check your `.env` values and restart the dev server after changes.
-- If RLS is blocking requests, verify the `profiles` row exists for your admin user.
-- Clear browser cache if you see stale data.
+- Verifica que Node.js esté correctamente instalado.
+- Comprueba que las variables del archivo `.env` sean correctas.
+- Reinicia el servidor después de modificar el `.env`.
+- Si las políticas RLS bloquean peticiones, confirma que exista un registro en la tabla `profiles` con el rol `admin`.
+- Limpia la caché del navegador si observas datos desactualizados.
 
 ---
 
-## Credits & Contact
+# 👨‍💻 Créditos y Contacto
 
-**Eki Zulfar Rachman**  
-Website: [eki.my.id](https://ekizr.com) · GitHub: [EkiZR](https://github.com/EkiZR)
+**Yoel Bulacia**
 
-Thanks to [LottieFiles](https://lottiefiles.com/free-animation/coding-NWhbxMOVgP) and Claude.
+🌐 Sitio Web: https://iscomrad.vercel.app
 
-⭐ If this project helped you, consider giving it a star on GitHub!
+Si este proyecto te resultó útil, considera darle una ⭐ al repositorio.
+
+¡Gracias por visitar Comrad!
