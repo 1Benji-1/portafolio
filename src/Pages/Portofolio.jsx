@@ -151,8 +151,25 @@ export default function FullWidthTabs() {
       if (projectsResponse.error) throw projectsResponse.error;
       if (certificatesResponse.error) throw certificatesResponse.error;
 
-      const projectData = projectsResponse.data || [];
-      const certificateData = certificatesResponse.data || [];
+      // Supabase devuelve las columnas en minúscula (title, img, tech_stack...).
+      // Normalizamos a los nombres que espera el resto del sitio
+      // (CardProject.jsx, ProjectDetail.jsx, Certificate.jsx) para no
+      // romper esos componentes.
+      const projectData = (projectsResponse.data || []).map((p) => ({
+        id: p.id,
+        Title: p.title,
+        Description: p.description,
+        Img: p.img,
+        Link: p.link,
+        Github: p.github,
+        TechStack: p.tech_stack || [],
+        Features: p.features || [],
+      }));
+
+      const certificateData = (certificatesResponse.data || []).map((c) => ({
+        id: c.id,
+        Img: c.img,
+      }));
 
       setProjects(projectData);
       setCertificates(certificateData);

@@ -32,7 +32,7 @@ const CertCard = ({ cert, onDelete }) => {
           <div className="w-full aspect-[16/11.5] bg-white/5 animate-pulse" />
         )}
         <img
-          src={cert.Img}
+          src={cert.img}
           alt="Certificate"
           onLoad={() => setImgLoaded(true)}
           className={`w-full aspect-[16/11.5] object-cover group-hover:scale-105 transition-transform duration-500 ${imgLoaded ? 'block' : 'hidden'}`}
@@ -62,7 +62,16 @@ export default function Certificates() {
 
   const fetchCerts = async () => {
     setLoading(true)
-    const { data } = await supabase.from('certificates').select('*').order('created_at', { ascending: false })
+    const { data, error } = await supabase
+      .from('certificates')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching certificates:', error)
+      alert('No se pudieron cargar los certificados: ' + error.message)
+    }
+
     setCerts(data || [])
     setLoading(false)
   }
@@ -78,17 +87,47 @@ export default function Certificates() {
   const uploadImage = async () => {
     if (!file) return
     setUploading(true)
+
     const fileName = `cert-${Date.now()}-${file.name}`
-    await supabase.storage.from('certificate-images').upload(fileName, file)
+    const { error: uploadError } = await supabase.storage
+      .from('certificate-images')
+      .upload(fileName, file)
+
+    if (uploadError) {
+      console.error('Error uploading certificate image:', uploadError)
+      alert('Error al subir la imagen: ' + uploadError.message)
+      setUploading(false)
+      return
+    }
+
     const { data } = supabase.storage.from('certificate-images').getPublicUrl(fileName)
-    await supabase.from('certificates').insert({ Img: data.publicUrl })
+
+    const { error: insertError } = await supabase
+      .from('certificates')
+      .insert({ img: data.publicUrl })
+
+    if (insertError) {
+      console.error('Error saving certificate:', insertError)
+      alert('No se pudo guardar el certificado: ' + insertError.message)
+      setUploading(false)
+      return
+    }
+
     setFile(null); setPreview(null); setUploading(false)
     fetchCerts()
   }
 
   const deleteCert = async (id) => {
     if (!confirm('Delete this certificate?')) return
-    await supabase.from('certificates').delete().eq('id', id)
+
+    const { error } = await supabase.from('certificates').delete().eq('id', id)
+
+    if (error) {
+      console.error('Error deleting certificate:', error)
+      alert('No se pudo eliminar el certificado: ' + error.message)
+      return
+    }
+
     fetchCerts()
   }
 
