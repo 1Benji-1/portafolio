@@ -33,11 +33,13 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
       {!showWelcome && (
         <>
           <Navbar />
-      
+
           <Home />
-          <About />
           <Suspense fallback={<div className="h-20" />}>
             <Portofolio />
+          </Suspense>
+          <About />
+          <Suspense fallback={<div className="h-20" />}>
             <ContactPage />
           </Suspense>
           <Footer />
@@ -60,7 +62,7 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    
+
     <HelmetProvider>
       <div className="pointer-events-none">
   <AnimatedBackground />

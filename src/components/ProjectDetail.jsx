@@ -166,14 +166,14 @@ const ProjectDetails = () => {
           content={
             project.Description
               ? project.Description.slice(0, 155)
-              : `Project ${project.Title} oleh Eki Zulfar Rachman — Frontend Web Developer.`
+              : `Project ${project.Title} Por Yoel Bulacia — Backend Developer.`
           }
         />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={projectUrl} />
         <meta
           property="og:title"
-          content={`${project.Title} — Eki Zulfar Rachman`}
+          content={`${project.Title} — Yoel Bulacia`}
         />
         <meta
           property="og:description"
@@ -191,8 +191,8 @@ const ProjectDetails = () => {
             "url": "${projectUrl}",
             "author": {
               "@type": "Person",
-              "name": "Eki Zulfar Rachman",
-              "url": "https://ekizr.com"
+              "name": "Yoel Bulacia",
+              "url": "https://iscomrad.vercel.app"
             }
           }
         `}</script>

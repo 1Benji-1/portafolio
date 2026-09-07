@@ -1,55 +1,137 @@
 {
   "nav": {
     "home": "Inicio",
-    "about": "Sobre mí",
-    "portfolio": "Portafolio",
-    "contact": "Contacto"
-  },
-  "home": {
-    "role1": "Desarrollador",
-    "role2": "Full-Stack",
-    "words": [
-      "Sistemas Web Escalables",
-      "Infraestructura Cloud",
-      "Desarrollo de APIs"
-    ],
-    "description": "Construyo aplicaciones full-stack de alto rendimiento orientadas a la escalabilidad. Desde arquitecturas backend robustas en Node.js y Python, hasta interfaces dinámicas en Next.js, entrego soluciones de principio a fin que generan valor real.",
+    "about": "Nosotros",
     "projects": "Proyectos",
     "contact": "Contacto"
   },
+  "home": {
+    "role1": "El Futuro Digital de tu",
+    "role2": "Empresa",
+    "words": ["Rendimiento", "Innovación", "Utilidad"],
+    "description": "Transformamos la forma en que opera tu negocio. Diseñamos y desarrollamos soluciones digitales creadas exactamente para resolver las necesidades únicas de tu empresa, automatizar tus procesos y ayudarte a crecer.",
+    "projects": "Ver Soluciones",
+    "contact": "Agenda una Consulta",
+    "capabilitiesTitle": "Lo que hacemos por tu negocio",
+    "capabilitiesSubtitle": "Tecnología pensada para hacer tu operación más simple, rápida y rentable.",
+    "capabilities": {
+      "backend": {
+        "title": "Control y Gestión Total",
+        "desc": "Sistemas centralizados para tus ventas, inventarios e informes automáticos que facilitan la toma de decisiones."
+      },
+      "mobile": {
+        "title": "Software a la Medida",
+        "desc": "Soluciones digitales únicas desarrolladas desde cero para adaptarse a las reglas específicas de tu empresa."
+      },
+      "database": {
+        "title": "Modernización Digital",
+        "desc": "Llevamos tus procesos en papel o tablas de Excel a plataformas seguras y accesibles desde cualquier lugar."
+      }
+    },
+    "ctaTitle": "¿Listo para llevar tu empresa al siguiente nivel?",
+    "ctaSubtitle": "Cuéntanos sobre los retos de tu negocio y diseñemos juntos el sistema ideal para ti."
+  },
   "about": {
-    "title": "Sobre Mí",
-    "subtitle": "Diseñando soluciones precisas para lógica de negocio compleja",
-    "greeting": "Hola, soy Yoel,",
-    "description": "Soy un Desarrollador Full-Stack con una sólida mentalidad de ingeniería, enfocado en la lógica de sistemas y la optimización de rendimiento. Me especializo en estructurar aplicaciones web escalables, diseñar bases de datos relacionales eficientes con PostgreSQL y desplegar soluciones en la nube con AWS y Vercel. Disfruto transformar requerimientos técnicos complejos en productos digitales fluidos y de alto rendimiento.",
-    "quote": "Entregando software confiable a través de principios sólidos de ingeniería.",
-    "downloadCv": "Descargar CV",
-    "viewProjects": "Ver Proyectos",
+    "title": "Sobre Nosotros",
+    "heroTitle": "Diseñamos software que simplifica y acelera tu empresa.",
+    "description": "En Lumen convertimos la complejidad operativa en plataformas digitales simples, ágiles y eficientes. Analizamos las necesidades reales de tu negocio para construir herramientas a la medida que automaticen procesos y respalden tu crecimiento.",
+    "promiseTitle": "Compromiso de Calidad",
+    "quote": "Entregamos software confiable, mantenible y diseñado específicamente para tus metas de negocio.",
+    "teamTitle": "Equipo Fundador",
+    "team": {
+      "developer": {
+        "role": "Líder de Desarrollo",
+        "bio": "Garantiza la solidez técnica, seguridad y alto rendimiento de cada sistema."
+      },
+      "pm": {
+        "role": "Directora de Proyectos",
+        "bio": "Asegura una comunicación fluida, entregas a tiempo y alineación con tus objetivos."
+      }
+    },
     "stats": {
-      "projects": "Apps en Producción",
-      "projectsDesc": "Soluciones completas desplegadas",
-      "certificates": "Certificaciones",
-      "certificatesDesc": "Crecimiento técnico continuo",
-      "experience": "Años programando",
-      "experienceDesc": "Resolviendo problemas complejos"
+      "projects": "Sistemas Entregados",
+      "projectsDesc": "Soluciones activas impactando negocios",
+      "certificates": "Garantía de Calidad",
+      "certificatesDesc": "Estándares y mejores prácticas",
+      "experience": "Años de Experiencia",
+      "experienceDesc": "Creando tecnología útil y confiable"
     }
   },
   "portfolio": {
-    "title": "Mi Portafolio",
-    "subtitle": "Un desglose técnico de mi trabajo reciente, destacando decisiones de arquitectura, modelado de bases de datos y despliegues en la nube.",
-    "seeMore": "Ver Más",
-    "seeLess": "Ver Menos",
-    "tabs": {
-      "projects": "Proyectos",
-      "certificates": "Certificados",
-      "techStack": "Tecnologías"
+    "title": "Soluciones & Productos",
+    "subtitle": "Desde software listo para desplegar hasta plataformas construidas 100% a la medida.",
+    "seeMore": "Ver más proyectos",
+    "seeLess": "Ver menos",
+    "license": {
+      "badge": "Software Listo para Usar",
+      "title": "Licencias de Software",
+      "intro": "Elige el plan ideal para tu negocio. Instalación rápida e infraestructura lista.",
+      "monthly": "Mensual",
+      "quarterly": "Trimestral",
+      "annual": "Anual",
+      "monthlyShort": "mes",
+      "quarterlyShort": "trimestre",
+      "annualShort": "año",
+      "savings": "Ahorras un {{percent}}%",
+      "popular": "Más elegido",
+      "cta": "Adquirir Licencia",
+      "products": {
+        "sales": {
+          "name": "Sistema de Ventas y Facturación",
+          "desc": "Gestión de ventas, clientes e inventario en un solo panel intuitivo.",
+          "f1": "Panel de administración rápido e intuitivo",
+          "f2": "Reportes diarios e informes automáticos",
+          "f3": "Soporte técnico y mantenimiento incluido"
+        },
+        "booking": {
+          "name": "Plataforma de Reservas",
+          "desc": "Agenda y reservas online automáticas para negocios de servicios.",
+          "f1": "Calendario y gestión en tiempo real",
+          "f2": "Recordatorios automáticos para clientes",
+          "f3": "Acceso multiusuario configurable"
+        },
+        "inventory": {
+          "name": "Panel de Inventario y Stock",
+          "desc": "Control total de almacenes, entradas, salidas y alertas de stock.",
+          "f1": "Gestión de múltiples almacenes",
+          "f2": "Alertas automáticas de stock bajo",
+          "f3": "Exportación de reportes a Excel"
+        }
+      }
+    },
+    "custom": {
+      "badge": "Servicios de Ingeniería",
+      "title": "Desarrollo de Software a la Medida",
+      "subtitle": "¿Tu empresa tiene reglas o procesos únicos? Diseñamos el sistema exacto que necesitas.",
+      "cta": "Solicitar Cotización a Medida",
+      "webSystems": {
+        "title": "Sistemas Web & Dashboards",
+        "desc": "Paneles de administración centralizados para controlar cada aspecto de tu operación."
+      },
+      "mobile": {
+        "title": "Aplicaciones Móviles",
+        "desc": "Apps para iOS y Android que permiten a tus clientes o equipo operar desde cualquier lugar."
+      },
+      "websites": {
+        "title": "Plataformas Web Corporativas",
+        "desc": "Sitios web rápidos, modernos y optimizados para convertir visitantes en clientes."
+      },
+      "integrations": {
+        "title": "Integraciones & APIs",
+        "desc": "Conectamos tu sistema actual con pasarelas de pago, facturación electrónica o WhatsApp."
+      }
+    },
+    "showcase": {
+      "badge": "Casos de Éxito",
+      "title": "Proyectos Destacados",
+      "subtitle": "Un vistazo a algunas de las soluciones digitales que hemos construido e implementado."
     }
   },
   "contact": {
     "title": "Hablemos",
-    "subtitle": "Ya sea que tengas un problema técnico complejo por resolver o un proyecto en mente, estoy listo para ayudarte a construirlo.",
-    "cardTitle": "Contáctame",
-    "cardSubtitle": "Envíame un correo y discutamos los requerimientos de tu sistema.",
+    "subtitle": "Ya sea que necesites automatizar un proceso o construir un sistema desde cero, estamos listos para ayudarte.",
+    "cardTitle": "Contáctanos",
+    "cardSubtitle": "Envíanos un correo y discutamos las necesidades de tu empresa.",
     "form": {
       "name": "Nombre",
       "email": "Correo",

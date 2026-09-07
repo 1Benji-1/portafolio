@@ -1,262 +1,246 @@
 import React, { useState, useEffect, useCallback, memo } from "react"
 import { Helmet } from "react-helmet-async"
-import { Github, Linkedin, Mail, ExternalLink, Instagram, Sparkles } from "lucide-react"
+import {
+  Github,
+  Linkedin,
+  Instagram,
+  Mail,
+  ArrowUpRight,
+} from "lucide-react"
 import { useTranslation } from "react-i18next"
-import AOS from 'aos'
-import 'aos/dist/aos.css'
+import AOS from "aos"
+import "aos/dist/aos.css"
 
+/* ------------------------------------------------------------------ */
+/*  Static data                                                       */
+/* ------------------------------------------------------------------ */
 
-const MainTitle = memo(() => {
-  const { t } = useTranslation();
-  return (
-    <div className="space-y-2" data-aos="fade-up" data-aos-delay="600">
-      <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl font-bold tracking-tight">
-        <span className="relative inline-block">
-          <span className="absolute -inset-2 bg-gradient-to-r from-neutral-500 to-neutral-300 blur-2xl opacity-20"></span>
-          <span className="relative bg-gradient-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent">
-            {t("home.role1")}
-          </span>
-        </span>
-        <br />
-        <span className="relative inline-block mt-2">
-          <span className="absolute -inset-2 bg-gradient-to-r from-neutral-500 to-neutral-300 blur-2xl opacity-20"></span>
-          <span className="relative bg-gradient-to-r from-neutral-500 to-neutral-300 bg-clip-text text-transparent">
-            {t("home.role2")}
-          </span>
-        </span>
-      </h1>
-    </div>
-  );
-});
+const TYPING_SPEED = 100
+const ERASING_SPEED = 50
+const PAUSE_DURATION = 2000
 
-const TechStack = memo(({ tech }) => (
-  <div className="px-4 py-2 hidden sm:block rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-sm text-gray-300 hover:bg-white/10 transition-colors">
-    {tech}
-  </div>
-));
-
-const CTAButton = memo(({ href, text, icon: Icon, isContact }) => (
-  <a href={href}>
-    <button className="group relative w-[160px]">
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-neutral-600 to-neutral-400 rounded-xl opacity-50 blur-md group-hover:opacity-90 transition-all duration-700"></div>
-      <div className="relative h-11 bg-black backdrop-blur-xl rounded-lg border border-white/10 leading-none overflow-hidden">
-        <div className="absolute inset-0 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 bg-gradient-to-r from-neutral-400/20 to-neutral-200/20"></div>
-        <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm group-hover:gap-3 transition-all duration-300">
-          <span className="bg-gradient-to-r from-gray-200 to-white bg-clip-text text-transparent font-medium z-10">
-            {text}
-          </span>
-          <Icon className={`w-4 h-4 text-gray-200 ${isContact ? 'group-hover:translate-x-1' : 'group-hover:rotate-45'} transform transition-all duration-300 z-10`} />
-        </span>
-      </div>
-    </button>
-  </a>
-));
-
-const SocialLink = memo(({ icon: Icon, link, label }) => (
-  <a href={link} target="_blank" rel="noopener noreferrer" aria-label={label}>
-    <button className="group relative p-3"
-      aria-label={label}>
-      <div className="absolute inset-0 bg-gradient-to-r from-neutral-500 to-neutral-400 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
-      <div className="relative rounded-xl bg-black/50 backdrop-blur-xl p-2 flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-all duration-300">
-        <Icon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
-      </div>
-    </button>
-  </a>
-));
-
-const TYPING_SPEED = 100;
-const ERASING_SPEED = 50;
-const PAUSE_DURATION = 2000;
-const TECH_STACK = ["Flutter", "Python", "Node JS", "PostgreSQL", "TypeScript", "React"];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/1Benji-1", label: "GitHub Profile" },
   { icon: Linkedin, link: "https://www.linkedin.com/in/bulacia-yoel/", label: "LinkedIn Profile" },
-  { icon: Instagram, link: "https://www.instagram.com/bulacia_yoel/?hl=id", label: "Instagram Profile" }
-];
+  { icon: Instagram, link: "https://www.instagram.com/bulacia_yoel/?hl=id", label: "Instagram Profile" },
+]
+
+/* Terminal boot sequence — decorative, updated for corporate context */
+const TERMINAL_LINES = [
+  "> Initializing enterprise environment...",
+  "[OK] Node.js runtime ready",
+  "[OK] PostgreSQL connection established",
+  "[OK] Cloud architecture configured",
+  "",
+  "> Compiling custom system...",
+  "[✓] Business logic optimized",
+  "[✓] Secure API endpoints exposed",
+  "[✓] Deployed to production",
+  "",
+  "System operational. Let's talk ↓",
+]
+
+/* ------------------------------------------------------------------ */
+/*  Small presentational components                                   */
+/* ------------------------------------------------------------------ */
+
+const GridBackground = memo(() => (
+  <div
+    aria-hidden="true"
+    className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#00000009_1px,transparent_1px),linear-gradient(to_bottom,#00000009_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:linear-gradient(to_bottom,black_20%,transparent_85%)]"
+  />
+))
+
+const PrimaryButton = memo(({ href, text, icon: Icon }) => (
+  <a
+    href={href}
+    className="group inline-flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-3.5 text-sm md:text-base font-medium text-white shadow-lg transition-all hover:bg-slate-800 hover:shadow-xl"
+  >
+    {text}
+    <Icon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+  </a>
+))
+
+const SecondaryButton = memo(({ href, text, icon: Icon }) => (
+  <a
+    href={href}
+    className="group inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3.5 text-sm md:text-base font-medium text-slate-900 shadow-sm transition-all hover:bg-slate-50"
+  >
+    {text}
+    <Icon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+  </a>
+))
+
+const SocialLink = memo(({ icon: Icon, link, label }) => (
+  <a
+    href={link}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={label}
+    className="group flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:border-slate-300 hover:shadow-md"
+  >
+    <Icon className="h-4.5 w-4.5 text-slate-500 transition-colors group-hover:text-slate-900" />
+  </a>
+))
+
+/* ------------------------------------------------------------------ */
+/*  Main component                                                    */
+/* ------------------------------------------------------------------ */
 
 const Home = () => {
-  const { t, i18n } = useTranslation();
-  const WORDS = t("home.words", { returnObjects: true });
+  const { t, i18n } = useTranslation()
+  const WORDS = t("home.words", { returnObjects: true })
 
   const [text, setText] = useState("")
   const [isTyping, setIsTyping] = useState(true)
   const [wordIndex, setWordIndex] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
   const [isLoaded, setIsLoaded] = useState(false)
-  const [isHovering, setIsHovering] = useState(false)
 
   useEffect(() => {
-    const initAOS = () => {
-      AOS.init({
-        once: true,
-        offset: 10,
-      });
-    };
-
-    initAOS();
-    window.addEventListener('resize', initAOS);
-    return () => window.removeEventListener('resize', initAOS);
-  }, []);
+    const initAOS = () => AOS.init({ once: true, offset: 10 })
+    initAOS()
+    window.addEventListener("resize", initAOS)
+    return () => window.removeEventListener("resize", initAOS)
+  }, [])
 
   useEffect(() => {
-    setIsLoaded(true);
-    return () => setIsLoaded(false);
-  }, []);
+    setIsLoaded(true)
+    return () => setIsLoaded(false)
+  }, [])
 
   useEffect(() => {
-    setText("");
-    setCharIndex(0);
-    setWordIndex(0);
-    setIsTyping(true);
-  }, [i18n.language]);
+    setText("")
+    setCharIndex(0)
+    setWordIndex(0)
+    setIsTyping(true)
+  }, [i18n.language])
 
   const handleTyping = useCallback(() => {
     if (isTyping) {
       if (charIndex < WORDS[wordIndex].length) {
-        setText(prev => prev + WORDS[wordIndex][charIndex]);
-        setCharIndex(prev => prev + 1);
+        setText((prev) => prev + WORDS[wordIndex][charIndex])
+        setCharIndex((prev) => prev + 1)
       } else {
-        setTimeout(() => setIsTyping(false), PAUSE_DURATION);
+        setTimeout(() => setIsTyping(false), PAUSE_DURATION)
       }
     } else {
       if (charIndex > 0) {
-        setText(prev => prev.slice(0, -1));
-        setCharIndex(prev => prev - 1);
+        setText((prev) => prev.slice(0, -1))
+        setCharIndex((prev) => prev - 1)
       } else {
-        setWordIndex(prev => (prev + 1) % WORDS.length);
-        setIsTyping(true);
+        setWordIndex((prev) => (prev + 1) % WORDS.length)
+        setIsTyping(true)
       }
     }
-  }, [charIndex, isTyping, wordIndex, WORDS]);
+  }, [charIndex, isTyping, wordIndex, WORDS])
 
   useEffect(() => {
-    const timeout = setTimeout(
-      handleTyping,
-      isTyping ? TYPING_SPEED : ERASING_SPEED
-    );
-    return () => clearTimeout(timeout);
-  }, [handleTyping]);
+    const timeout = setTimeout(handleTyping, isTyping ? TYPING_SPEED : ERASING_SPEED)
+    return () => clearTimeout(timeout)
+  }, [handleTyping])
 
   return (
     <>
       <Helmet>
-        <title>Yoel Bulacia | Full-Stack Developer (Mobile & Web)</title>
-        <meta name="description" content="Official website of Yoel Bulacia, Full-Stack Developer specialized in mobile apps (Flutter) and web development. I build complete products end-to-end, from backend architecture to user interface." />
+        <title>Lumen | Software a Medida & Soluciones Digitales</title>
+        <meta
+          name="description"
+          content="Lumen desarrolla software a la medida para empresas y PyMEs. Soluciones digitales diseñadas para optimizar procesos, controlar ventas e impulsarte al siguiente nivel."
+        />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://comrad.vercel.app" />
-        <meta property="og:title" content="Yoel Bulacia — Full-Stack Developer" />
-        <meta property="og:description" content="Official website and portfolio of Yoel Bulacia, Full-Stack Developer (Mobile & Web)." />
+        <meta property="og:title" content="Lumen — El Futuro Digital de tu Empresa" />
+        <meta
+          property="og:description"
+          content="Desarrollo de software a la medida, automatización e infraestructura en la nube para empresas que buscan crecer."
+        />
         <meta property="og:url" content="https://comrad.vercel.app" />
         <meta property="og:type" content="website" />
-        <script type="application/ld+json">{`
-          {
-            "@context": "https://schema.org",
-            "@type": "Person",
-            "name": "Yoel Bulacia",
-            "jobTitle": "Full-Stack Developer",
-            "url": "https://comrad.vercel.app",
-            "sameAs": [
-              "https://github.com/bulacia-yoel",
-              "https://www.linkedin.com/bulacia-yoel",
-              "https://www.instagram.com/bulacia-yoel"
-            ]
-          }
-        `}</script>
-    </Helmet>
+      </Helmet>
 
-      <div className="min-h-screen bg-transparent overflow-hidden px-[5%] sm:px-[5%] lg:px-[10%]" id="Home">
-        <div className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
-          <div className="container mx-auto min-h-screen">
-            {/* CORRECCIÓN DE LAYOUT: min-h-screen en lugar de h-screen, y pt-24 para compensar el Navbar */}
-            <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen md:justify-between gap-10 sm:gap-12 lg:gap-20 pt-28 sm:pt-24 pb-12 lg:pt-[40px] lg:pb-0">
-              {/* Left Column */}
-              <div className="w-full lg:w-1/2 space-y-6 sm:space-y-8 text-left lg:text-left order-1 lg:order-1 lg:mt-0"
-                data-aos="fade-right"
-                data-aos-delay="200">
-                <div className="space-y-4 sm:space-y-6">
-                  {/* Se eliminó el div separador porque el pt-24 del contenedor ya hace el trabajo */}
-                  <MainTitle />
+      {/* Fondo blanco opaco propio de Home */}
+      <section
+        id="Home"
+        className={`relative isolate overflow-hidden bg-white transition-opacity duration-1000 ${
+          isLoaded ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <GridBackground />
 
-                  {/* Typing Effect */}
-                  <div className="h-8 flex items-center" data-aos="fade-up" data-aos-delay="800">
-                    <span className="text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light">
-                      {text}
-                    </span>
-                    <span className="w-[3px] h-6 bg-white ml-1 animate-blink"></span>
-                  </div>
+        <div className="relative z-10 mx-auto max-w-6xl px-6 pb-24 pt-24 sm:px-8 sm:pt-28 lg:px-10">
+          {/* ---------------------------------------------------------- */}
+          {/* Hero                                                       */}
+          {/* ---------------------------------------------------------- */}
+          <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-10">
+            {/* Left column */}
+            <div className="flex flex-col gap-6" data-aos="fade-right" data-aos-delay="200">
+              <h1
+                className="text-5xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-6xl lg:text-6xl xl:text-7xl"
+                data-aos="fade-up"
+                data-aos-delay="400"
+              >
+                {t("home.role1")}
+                <br />
+                <span className="text-slate-400">{t("home.role2")}</span>
+              </h1>
 
-                  {/* Description */}
-                 <p className="text-base md:text-lg text-gray-400 max-w-xl leading-relaxed font-light"
-                  data-aos="fade-up"
-                  data-aos-delay="1000">
-                  {t("home.description")}
-                </p>
-
-                  {/* Tech Stack */}
-                  <div className="flex flex-wrap gap-3 justify-start" data-aos="fade-up" data-aos-delay="1200">
-                    {TECH_STACK.map((tech, index) => (
-                      <TechStack key={index} tech={tech} />
-                    ))}
-                  </div>
-
-                  {/* CTA Buttons */}
-                  <div className="flex flex-row gap-3 w-full justify-start" data-aos="fade-up" data-aos-delay="1400">
-                    <CTAButton href="#Portofolio" text={t("home.projects")} icon={ExternalLink} />
-                    <CTAButton href="#Contact" text={t("home.contact")} icon={Mail} isContact />
-                  </div>
-
-                  {/* Social Links */}
-                  <div className="hidden sm:flex gap-4 justify-start" data-aos="fade-up" data-aos-delay="1600">
-                    {SOCIAL_LINKS.map((social, index) => (
-                      <SocialLink key={index} {...social} />
-                    ))}
-                  </div>
-                </div>
+              {/* Typing effect */}
+              <div className="flex h-8 items-center" data-aos="fade-up" data-aos-delay="600">
+                <span className="text-lg font-medium text-slate-700 md:text-xl">{text}</span>
+                <span className="ml-1 h-6 w-[3px] animate-pulse bg-slate-900" />
               </div>
 
-              {/* Right Column - WebM Video */}
-              <div className="w-full py-0 md:py-[10%] sm:py-0 lg:w-1/2 h-[260px] sm:h-[400px] lg:h-[600px] xl:h-[750px] relative flex items-center justify-center order-2 lg:order-2 mt-5 sm:mt-0 lg:-mt-16 xl:-mt-20"
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-                data-aos="fade-left"
-                data-aos-delay="600">
-                <div className="relative w-full opacity-90">
-                  <div className={`absolute inset-0 bg-gradient-to-r from-white/10 to-neutral-500/10 rounded-3xl blur-3xl transition-all duration-700 ease-in-out ${
-                    isHovering ? "opacity-50 scale-105" : "opacity-20 scale-100"
-                  }`}>
-                  </div>
+              <p
+                className="max-w-lg text-base leading-relaxed text-slate-500 md:text-lg"
+                data-aos="fade-up"
+                data-aos-delay="800"
+              >
+                {t("home.description")}
+              </p>
 
-                  <div className={`relative lg:left-12 z-10 w-full opacity-90 transform transition-transform duration-500 ${
-                    isHovering ? "scale-105" : "scale-100"
-                  }`}>
-                    <img
-                      src="computer.png"
-                      alt="Computer Illustration"
-                      loading="eager"
-                      className={`w-full h-full object-contain rounded-2xl transition-all duration-500 ${
-                        isHovering
-                          ? "scale-[95%] sm:scale-[90%] md:scale-[90%] lg:scale-[90%] rotate-2"
-                          : "scale-[90%] sm:scale-[80%] md:scale-[80%] lg:scale-[80%]"
-                      }`}
-                  />
-                  </div>
+              {/* CTA buttons */}
+              <div className="flex flex-wrap items-center gap-4" data-aos="fade-up" data-aos-delay="1000">
+                <PrimaryButton href="#Projects" text={t("home.projects")} icon={ArrowUpRight} />
+                <SecondaryButton href="#Contact" text={t("home.contact")} icon={Mail} />
+              </div>
 
-                  <div className={`absolute inset-0 pointer-events-none transition-all duration-700 ${
-                    isHovering ? "opacity-50" : "opacity-20"
-                  }`}>
-                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-white/10 to-neutral-500/10 blur-3xl animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite] transition-all duration-700 ${
-                      isHovering ? "scale-110" : "scale-100"
-                    }`}>
+              {/* Social links */}
+              <div className="flex gap-3" data-aos="fade-up" data-aos-delay="1200">
+                {SOCIAL_LINKS.map((social) => (
+                  <SocialLink key={social.label} {...social} />
+                ))}
+              </div>
+            </div>
+
+            {/* Right column — terminal card */}
+            <div
+              className="relative flex w-full items-start lg:pt-[40px] lg:aspect-[4/5]"
+              data-aos="fade-left"
+              data-aos-delay="400"
+            >
+              <div className="relative w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 shadow-2xl">
+                <div className="flex h-10 shrink-0 items-center gap-2 border-b border-slate-800 bg-slate-900 px-4">
+                  <div className="h-3 w-3 rounded-full bg-slate-700" />
+                  <div className="h-3 w-3 rounded-full bg-slate-700" />
+                  <div className="h-3 w-3 rounded-full bg-slate-700" />
+                  <span className="ml-2 text-xs text-slate-500">lumen@terminal ~ %</span>
+                </div>
+                <div className="flex min-h-[280px] flex-col justify-end p-6 font-mono text-xs leading-relaxed text-emerald-400/80 sm:min-h-[360px] sm:text-sm">
+                  {TERMINAL_LINES.map((line, i) => (
+                    <div key={i} className={line === "" ? "h-3" : ""}>
+                      {line}
                     </div>
-                  </div>
+                  ))}
+                  <span className="animate-pulse">_</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </>
-  );
-};
+  )
+}
 
-export default memo(Home);
+export default memo(Home)

@@ -1,83 +1,119 @@
 import React, { useEffect, memo, useMemo } from "react"
-import { FileText, Code, Award, Globe, ArrowUpRight, Sparkles, UserCheck } from "lucide-react"
+import { Code, Award, Globe, ArrowUpRight, UserCheck, Github, Linkedin, ShieldCheck, Zap } from "lucide-react"
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { useTranslation } from "react-i18next"
 
-// Memoized Components
+/* ------------------------------------------------------------------ */
+/*  Static data — equipo fundador                                     */
+/* ------------------------------------------------------------------ */
+
+const TEAM = [
+  {
+    name: "Yoel Bulacia",
+    photo: "team-yoel.jpg",
+    roleKey: "developer",
+    linkedin: "https://www.linkedin.com/in/bulacia-yoel/",
+    github: "https://github.com/1Benji-1",
+  },
+  {
+    name: "Isabel Vaquera",
+    photo: "team-isabel.jpg",
+    roleKey: "pm",
+    linkedin: "",
+    github: "",
+  },
+]
+
+// Header limpio y minimalista
 const Header = memo(() => {
   const { t } = useTranslation();
   return (
-    <div className="text-center lg:mb-8 mb-2 px-[5%]">
+    <div className="text-center lg:mb-12 mb-6 px-[5%]">
       <div className="inline-block relative group">
         <h2
-          className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400"
+          className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight"
           data-aos="zoom-in-up"
           data-aos-duration="600"
         >
           {t("about.title")}
         </h2>
       </div>
-      <p
-        className="mt-2 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg flex items-center justify-center gap-2"
-        data-aos="zoom-in-up"
-        data-aos-duration="800"
-      >
-        <Sparkles className="w-5 h-5 text-neutral-400" />
-        {t("about.subtitle")}
-        <Sparkles className="w-5 h-5 text-neutral-400" />
-      </p>
     </div>
   );
 });
 
-const ProfileImage = memo(() => (
-  <div className="flex justify-end items-center sm:p-12 sm:py-0 sm:pb-0 p-0 py-2 pb-2">
+const TeamCard = memo(({ member, animation }) => {
+  const { t } = useTranslation();
+  return (
     <div
-      className="relative group"
-      data-aos="fade-up"
+      className="group relative rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex flex-col items-center text-center"
+      data-aos={animation}
       data-aos-duration="1000"
     >
-      <div className="absolute -inset-6 opacity-[25%] z-0 hidden sm:block">
-        <div className="absolute inset-0 bg-gradient-to-r from-neutral-400 via-neutral-600 to-neutral-400 rounded-full blur-2xl animate-spin-slower" />
-        <div className="absolute inset-0 bg-gradient-to-l from-white via-neutral-500 to-black rounded-full blur-2xl animate-pulse-slow opacity-50" />
-      </div>
-
-      <div className="relative">
-        <div className="w-72 h-72 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-[0_0_40px_rgba(120,119,198,0.3)] transform transition-all duration-700 group-hover:scale-105">
-          <div className="absolute inset-0 border-4 border-white/20 rounded-full z-20 transition-all duration-700 group-hover:border-white/40 group-hover:scale-105" />
-
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 z-10 transition-opacity duration-700 group-hover:opacity-0 hidden sm:block" />
-
+      <div className="relative mb-5">
+        <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-slate-100 shadow-sm">
           <img
-            src="/Photo.jpg"
-            alt="Profile"
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-2"
+            src={member.photo}
+            alt={member.name}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
           />
-
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-20 hidden sm:block">
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-            <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-white/10 to-transparent transform translate-y-full group-hover:-translate-y-full transition-transform duration-1000 delay-100" />
-            <div className="absolute inset-0 rounded-full border-8 border-white/10 scale-0 group-hover:scale-100 transition-transform duration-700 animate-pulse-slow" />
-          </div>
+        </div>
+        <div className="absolute -bottom-1 -right-1 flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 border-4 border-white">
+          <UserCheck className="w-4 h-4 text-white" />
         </div>
       </div>
+
+      <h3 className="text-lg sm:text-xl font-bold text-slate-900">{member.name}</h3>
+      <span className="mt-1 inline-block text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-500">
+        {t(`about.team.${member.roleKey}.role`)}
+      </span>
+      <p className="mt-3 text-sm text-slate-500 leading-relaxed max-w-xs">
+        {t(`about.team.${member.roleKey}.bio`)}
+      </p>
+
+      {(member.linkedin || member.github) && (
+        <div className="mt-5 flex items-center gap-3">
+          {member.linkedin && (
+            <a
+              href={member.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${member.name} LinkedIn`}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-400 transition-colors hover:border-slate-300 hover:text-slate-900"
+            >
+              <Linkedin className="w-4 h-4" />
+            </a>
+          )}
+          {member.github && (
+            <a
+              href={member.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${member.name} GitHub`}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-400 transition-colors hover:border-slate-300 hover:text-slate-900"
+            >
+              <Github className="w-4 h-4" />
+            </a>
+          )}
+        </div>
+      )}
     </div>
-  </div>
-));
+  );
+});
 
 const StatCard = memo(({ icon: Icon, color, value, label, description, animation }) => (
   <div data-aos={animation} data-aos-duration={1300} className="relative group">
-    <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl p-6 border border-white/10 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl h-full flex flex-col justify-between">
+    <div className="relative z-10 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl h-full flex flex-col justify-between">
       <div className={`absolute -z-10 inset-0 bg-gradient-to-br ${color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
 
       <div className="flex items-center justify-between mb-4">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10 transition-transform group-hover:rotate-6">
+        <div className="w-16 h-16 rounded-full flex items-center justify-center bg-slate-900 transition-transform group-hover:rotate-6">
           <Icon className="w-8 h-8 text-white" />
         </div>
         <span
-          className="text-4xl font-bold text-white"
+          className="text-4xl font-bold text-slate-900"
           data-aos="fade-up-left"
           data-aos-duration="1500"
           data-aos-anchor-placement="top-bottom"
@@ -88,7 +124,7 @@ const StatCard = memo(({ icon: Icon, color, value, label, description, animation
 
       <div>
         <p
-          className="text-sm uppercase tracking-wider text-gray-300 mb-2"
+          className="text-sm uppercase tracking-wider text-slate-500 mb-2"
           data-aos="fade-up"
           data-aos-duration="800"
           data-aos-anchor-placement="top-bottom"
@@ -97,14 +133,14 @@ const StatCard = memo(({ icon: Icon, color, value, label, description, animation
         </p>
         <div className="flex items-center justify-between">
           <p
-            className="text-xs text-gray-400"
+            className="text-xs text-slate-400"
             data-aos="fade-up"
             data-aos-duration="1000"
             data-aos-anchor-placement="top-bottom"
           >
             {description}
           </p>
-          <ArrowUpRight className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
+          <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-slate-900 transition-colors" />
         </div>
       </div>
     </div>
@@ -181,110 +217,71 @@ const AboutPage = () => {
 
   return (
     <div
-      className="h-auto pb-[10%] text-white overflow-hidden px-[5%] sm:px-[5%] lg:px-[10%] mt-10 sm-mt-0"
+      className="h-auto pb-[10%] text-slate-900 overflow-hidden bg-white px-[5%] sm:px-[5%] lg:px-[10%] mt-10 sm:mt-0"
       id="About"
       itemScope
-      itemType="https://schema.org/Person"
+      itemType="https://schema.org/Organization"
     >
       <Header />
 
-      <div className="w-full mx-auto pt-8 sm:pt-12 relative">
-        <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <div className="space-y-6 text-center lg:text-left">
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold"
-              data-aos="fade-right"
-              data-aos-duration="1000"
-            >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400">
-                {t("about.greeting")}
-              </span>
-              <span
-                className="block mt-2 text-gray-200"
-                data-aos="fade-right"
-                data-aos-duration="1300"
-                itemProp="name"
-              >
-                Yoel Bulacia
-              </span>
-            </h2>
+      <div className="w-full mx-auto relative">
+        {/* NUEVO LAYOUT DE PRESENTACIÓN (Estilo Apple / Stripe en 2 columnas) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start max-w-5xl mx-auto">
+          {/* Columna Izquierda: Titular impactante */}
+          <div className="lg:col-span-5 space-y-4" data-aos="fade-right" data-aos-duration="1000">
+            <h3 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight tracking-tight">
+              {t("about.heroTitle")}
+            </h3>
+            <div className="h-1 w-20 bg-slate-900 rounded-full"></div>
+          </div>
 
-            <p
-              className="text-base sm:text-lg lg:text-xl text-gray-400 leading-relaxed text-justify pb-4 sm:pb-0"
-              data-aos="fade-right"
-              data-aos-duration="1500"
-            >
+          {/* Columna Derecha: Explicación concisa y tarjeta destacada */}
+          <div className="lg:col-span-7 space-y-6" data-aos="fade-left" data-aos-duration="1000">
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
               {t("about.description")}
             </p>
 
-            <div
-              className="relative bg-neutral-900/30 border border-neutral-700/50 rounded-2xl p-4 my-6 backdrop-blur-md shadow-2xl overflow-hidden"
-              data-aos="fade-up"
-              data-aos-duration="1700"
-            >
-              <div className="absolute top-3 left-4 text-neutral-500 opacity-50">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
-                </svg>
+            {/* Tarjeta de Promesa / Valor de Marca */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-4 shadow-sm">
+              <div className="p-2.5 bg-slate-900 text-white rounded-xl shrink-0">
+                <ShieldCheck className="w-6 h-6" />
               </div>
-
-              <blockquote className="text-gray-300 text-center lg:text-left italic font-medium text-sm relative z-10 pl-6">
-                "{t("about.quote")}"
-              </blockquote>
-            </div>
-
-            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-4 lg:px-0 w-full">
-              <a href="https://drive.google.com/file/d/1aDzTu6NfQ2SwkjaxnYGfnIhMeJQze0iE/view?usp=sharing" className="w-full lg:w-auto">
-              <button
-                data-aos="fade-up"
-                data-aos-duration="800"
-                className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg bg-white text-black font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 shadow-lg hover:shadow-xl "
-              >
-                <FileText className="w-4 h-4 sm:w-5 sm:h-5" /> {t("about.downloadCv")}
-              </button>
-              </a>
-              <a href="#Portofolio" className="w-full lg:w-auto">
-              <button
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg border border-neutral-600 text-neutral-300 font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 hover:bg-neutral-800 "
-              >
-                <Code className="w-4 h-4 sm:w-5 sm:h-5" /> {t("about.viewProjects")}
-              </button>
-              </a>
+              <div>
+                <h4 className="font-bold text-slate-900 text-sm sm:text-base mb-1">
+                  {t("about.promiseTitle")}
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  {t("about.quote")}
+                </p>
+              </div>
             </div>
           </div>
-
-          <ProfileImage />
         </div>
 
-        <a href="#Portofolio">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 cursor-pointer">
+        {/* Equipo fundador */}
+        <div className="mt-20 sm:mt-24">
+          <h3
+            className="text-center text-xs sm:text-sm font-bold uppercase tracking-widest text-slate-400 mb-10"
+            data-aos="fade-up"
+          >
+            {t("about.teamTitle")}
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            {TEAM.map((member, i) => (
+              <TeamCard key={member.name} member={member} animation={i === 0 ? "fade-right" : "fade-left"} />
+            ))}
+          </div>
+        </div>
+
+        {/* Métricas */}
+        <a href="#Projects">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 cursor-pointer">
             {statsData.map((stat) => (
               <StatCard key={stat.label} {...stat} />
             ))}
           </div>
         </a>
       </div>
-
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-        @keyframes spin-slower {
-          to { transform: rotate(360deg); }
-        }
-        .animate-bounce-slow {
-          animation: bounce 3s infinite;
-        }
-        .animate-pulse-slow {
-          animation: pulse 3s infinite;
-        }
-        .animate-spin-slower {
-          animation: spin-slower 8s linear infinite;
-        }
-      `}</style>
     </div>
   );
 };

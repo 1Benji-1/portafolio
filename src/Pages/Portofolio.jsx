@@ -1,160 +1,117 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { supabase } from "../supabase";
-import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
-import { useTheme } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import CardProject from "../components/CardProject";
-import TechStackIcon from "../components/TechStackIcon";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Certificate from "../components/Certificate";
-import { Code, Award, Boxes } from "lucide-react";
+import {
+  ShoppingCart,
+  CalendarClock,
+  Package,
+  Check,
+  Smartphone,
+  Monitor,
+  Globe,
+  Zap,
+  ArrowRight
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-const ToggleButton = ({ onClick, isShowingMore }) => {
-  const { t } = useTranslation();
-  return (
-    <button
-      onClick={onClick}
-      className="
-        px-3 py-1.5
-        text-slate-300
-        hover:text-white
-        text-sm
-        font-medium
-        transition-all
-        duration-300
-        ease-in-out
-        flex
-        items-center
-        gap-2
-        bg-white/5
-        hover:bg-white/10
-        rounded-md
-        border
-        border-white/10
-        hover:border-white/20
-        backdrop-blur-sm
-        group
-        relative
-        overflow-hidden
-      "
-    >
-      <span className="relative z-10 flex items-center gap-2">
-        {isShowingMore ? t("portfolio.seeLess") : t("portfolio.seeMore")}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className={`
-            transition-transform
-            duration-300
-            ${isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"}
-          `}
-        >
-          <polyline points={isShowingMore ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
-        </svg>
-      </span>
-      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-neutral-400/50 transition-all duration-300 group-hover:w-full"></span>
-    </button>
-  );
-};
-
-function TabPanel({ children, value, index, ...other }) {
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: { xs: 1, sm: 3 } }}>
-          <Typography component="div">{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    "aria-controls": `full-width-tabpanel-${index}`,
-  };
-}
-
-const techStacks = [
-  // Lenguajes Core
-  { icon: "typescript.svg", language: "TypeScript" },
-  { icon: "flutter.svg", language: "Flutter" },
-  { icon: "python.svg", language: "Python" },
-
-  // Frontend
-  { icon: "reactjs.svg", language: "React" },
-  { icon: "nextjs.svg", language: "Next.js" },
-  { icon: "tailwind.svg", language: "Tailwind CSS" },
-
-  // Backend & Base de Datos
-  { icon: "nodejs.svg", language: "Node JS" },
-  { icon: "postgresql.svg", language: "PostgreSQL" },
-  { icon: "supabase.svg", language: "Supabase" },
-
-  // Infraestructura, Despliegue & Nube
-  { icon: "docker.svg", language: "Docker" },
-  { icon: "vercel.svg", language: "Vercel" },
-  { icon: "aws.svg", language: "AWS" },
+/* ------------------------------------------------------------------ */
+/*  1. Productos con Licencia                                          */
+/* ------------------------------------------------------------------ */
+const BILLING_PERIODS = [
+  { key: "monthly", labelKey: "portfolio.license.monthly" },
+  { key: "quarterly", labelKey: "portfolio.license.quarterly" },
+  { key: "annual", labelKey: "portfolio.license.annual" },
 ];
 
-export default function FullWidthTabs() {
+const LICENSE_PRODUCTS = [
+  {
+    id: "sales",
+    icon: ShoppingCart,
+    nameKey: "portfolio.license.products.sales.name",
+    descKey: "portfolio.license.products.sales.desc",
+    featureKeys: [
+      "portfolio.license.products.sales.f1",
+      "portfolio.license.products.sales.f2",
+      "portfolio.license.products.sales.f3",
+    ],
+    pricing: { monthly: 350, quarterly: 950, annual: 3300 },
+  },
+  {
+    id: "booking",
+    icon: CalendarClock,
+    nameKey: "portfolio.license.products.booking.name",
+    descKey: "portfolio.license.products.booking.desc",
+    featureKeys: [
+      "portfolio.license.products.booking.f1",
+      "portfolio.license.products.booking.f2",
+      "portfolio.license.products.booking.f3",
+    ],
+    pricing: { monthly: 280, quarterly: 760, annual: 2650 },
+    highlighted: true,
+  },
+  {
+    id: "inventory",
+    icon: Package,
+    nameKey: "portfolio.license.products.inventory.name",
+    descKey: "portfolio.license.products.inventory.desc",
+    featureKeys: [
+      "portfolio.license.products.inventory.f1",
+      "portfolio.license.products.inventory.f2",
+      "portfolio.license.products.inventory.f3",
+    ],
+    pricing: { monthly: 400, quarterly: 1080, annual: 3800 },
+  },
+];
+
+const SAVINGS_BY_PERIOD = { monthly: 0, quarterly: 9, annual: 21 };
+
+/* ------------------------------------------------------------------ */
+/*  2. Tipos de Desarrollo a la Medida                                 */
+/* ------------------------------------------------------------------ */
+const CUSTOM_SERVICES = [
+  {
+    icon: Monitor,
+    titleKey: "portfolio.custom.webSystems.title",
+    descKey: "portfolio.custom.webSystems.desc",
+  },
+  {
+    icon: Smartphone,
+    titleKey: "portfolio.custom.mobile.title",
+    descKey: "portfolio.custom.mobile.desc",
+  },
+  {
+    icon: Globe,
+    titleKey: "portfolio.custom.websites.title",
+    descKey: "portfolio.custom.websites.desc",
+  },
+  {
+    icon: Zap,
+    titleKey: "portfolio.custom.integrations.title",
+    descKey: "portfolio.custom.integrations.desc",
+  },
+];
+
+export default function ProjectsPage() {
   const { t } = useTranslation();
-  const theme = useTheme();
-  const [value, setValue] = useState(0);
   const [projects, setProjects] = useState([]);
-  const [certificates, setCertificates] = useState([]);
+  const [billingPeriod, setBillingPeriod] = useState("monthly");
   const [showAllProjects, setShowAllProjects] = useState(false);
-  const [showAllCertificates, setShowAllCertificates] = useState(false);
-  const isMobile = window.innerWidth < 768;
-  const initialItems = isMobile ? 4 : 6;
 
   useEffect(() => {
-    AOS.init({
-      once: false,
-    });
+    AOS.init({ once: false });
   }, []);
 
   const fetchData = useCallback(async () => {
     try {
-      const [projectsResponse, certificatesResponse] = await Promise.all([
-        supabase.from("projects").select("*").order('id', { ascending: false }),
-        supabase.from("certificates").select("*").order('id', { ascending: false }),
-      ]);
+      const projectsResponse = await supabase
+        .from("projects")
+        .select("*")
+        .order("id", { ascending: false });
 
       if (projectsResponse.error) throw projectsResponse.error;
-      if (certificatesResponse.error) throw certificatesResponse.error;
 
-      // Supabase devuelve las columnas en minúscula (title, img, tech_stack...).
-      // Normalizamos a los nombres que espera el resto del sitio
-      // (CardProject.jsx, ProjectDetail.jsx, Certificate.jsx) para no
-      // romper esos componentes.
       const projectData = (projectsResponse.data || []).map((p) => ({
         id: p.id,
         Title: p.title,
@@ -166,229 +123,234 @@ export default function FullWidthTabs() {
         Features: p.features || [],
       }));
 
-      const certificateData = (certificatesResponse.data || []).map((c) => ({
-        id: c.id,
-        Img: c.img,
-      }));
-
       setProjects(projectData);
-      setCertificates(certificateData);
-
       localStorage.setItem("projects", JSON.stringify(projectData));
-      localStorage.setItem("certificates", JSON.stringify(certificateData));
     } catch (error) {
       console.error("Error fetching data from Supabase:", error.message);
     }
   }, []);
 
   useEffect(() => {
-    const cachedProjects = localStorage.getItem('projects');
-    const cachedCertificates = localStorage.getItem('certificates');
-
-    if (cachedProjects && cachedCertificates) {
-        setProjects(JSON.parse(cachedProjects));
-        setCertificates(JSON.parse(cachedCertificates));
+    const cachedProjects = localStorage.getItem("projects");
+    if (cachedProjects) {
+      setProjects(JSON.parse(cachedProjects));
     }
-
     fetchData();
   }, [fetchData]);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const toggleShowMore = useCallback((type) => {
-    if (type === 'projects') {
-      setShowAllProjects(prev => !prev);
-    } else {
-      setShowAllCertificates(prev => !prev);
-    }
-  }, []);
-
-  const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
-  const displayedCertificates = showAllCertificates ? certificates : certificates.slice(0, initialItems);
+  const displayedProjects = showAllProjects ? projects : projects.slice(0, 4);
 
   return (
-    <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-transparent overflow-hidden" id="Portofolio">
+    <div className="md:px-[10%] px-[5%] w-full py-16 bg-white overflow-hidden" id="Projects">
 
-      <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
-        <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-400">
-          <span style={{
-            color: '#ffffff',
-            backgroundImage: 'linear-gradient(45deg, #ffffff 10%, #a3a3a3 93%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
-            {t("portfolio.title")}
-          </span>
+      {/* ============================================================ */}
+      {/* ENCABEZADO DE LA SECCIÓN                                     */}
+      {/* ============================================================ */}
+      <div className="text-center pb-16" data-aos="fade-up">
+        <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+          {t("portfolio.title")}
         </h2>
-        <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
+        <p className="text-slate-500 max-w-2xl mx-auto text-base sm:text-lg mt-3">
           {t("portfolio.subtitle")}
         </p>
       </div>
 
-      <Box sx={{ width: "100%" }}>
-        <AppBar
-          position="static"
-          elevation={0}
-          sx={{
-            bgcolor: "transparent",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "20px",
-            position: "relative",
-            overflow: "hidden",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: "linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(150, 150, 150, 0.03) 100%)",
-              backdropFilter: "blur(10px)",
-              zIndex: 0,
-            },
-          }}
-          className="md:px-4"
-        >
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="secondary"
-            indicatorColor="secondary"
-            variant="fullWidth"
-            sx={{
-              minHeight: "70px",
-              "& .MuiTab-root": {
-                fontSize: { xs: "0.9rem", md: "1rem" },
-                fontWeight: "600",
-                color: "#94a3b8",
-                textTransform: "none",
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                padding: "20px 0",
-                zIndex: 1,
-                margin: "8px",
-                borderRadius: "12px",
-                "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "rgba(255, 255, 255, 0.05)",
-                  transform: "translateY(-2px)",
-                  "& .lucide": {
-                    transform: "scale(1.1) rotate(5deg)",
-                  },
-                },
-                "&.Mui-selected": {
-                  color: "#fff",
-                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(150, 150, 150, 0.1))",
-                  boxShadow: "0 4px 15px -3px rgba(255, 255, 255, 0.1)",
-                  "& .lucide": {
-                    color: "#ffffff",
-                  },
-                },
-              },
-              "& .MuiTabs-indicator": {
-                height: 0,
-              },
-              "& .MuiTabs-flexContainer": {
-                gap: "8px",
-              },
-            }}
-          >
-            <Tab
-              icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label={t("portfolio.tabs.projects")}
-              {...a11yProps(0)}
-            />
-            <Tab
-              icon={<Award className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label={t("portfolio.tabs.certificates")}
-              {...a11yProps(1)}
-            />
-            <Tab
-              icon={<Boxes className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label={t("portfolio.tabs.techStack")}
-              {...a11yProps(2)}
-            />
-          </Tabs>
-        </AppBar>
+      {/* ============================================================ */}
+      {/* BLOQUE 1: SISTEMAS POR LICENCIA (Listo para usar)             */}
+      {/* ============================================================ */}
+      <div className="mb-24">
+        <div className="text-center mb-8" data-aos="fade-up">
+          <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
+            {t("portfolio.license.badge")}
+          </span>
+          <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mt-1">
+            {t("portfolio.license.title")}
+          </h3>
+          <p className="text-slate-500 text-sm max-w-lg mx-auto mt-2">
+            {t("portfolio.license.intro")}
+          </p>
 
-        <SwipeableViews
-          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-          index={value}
-          onChangeIndex={setValue}
-        >
-          <TabPanel value={value} index={0} dir={theme.direction}>
-            <div className="container mx-auto flex justify-center items-center overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
-                {displayedProjects.map((project, index) => (
-                  <div
-                    key={project.id || index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
-                  >
-                    <CardProject
-                      Img={project.Img}
-                      Title={project.Title}
-                      Description={project.Description}
-                      Link={project.Link}
-                      id={project.id}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-            {projects.length > initialItems && (
-              <div className="mt-6 w-full flex justify-start">
-                <ToggleButton
-                  onClick={() => toggleShowMore('projects')}
-                  isShowingMore={showAllProjects}
-                />
-              </div>
-            )}
-          </TabPanel>
+          {/* Toggle de Periodo de Pago */}
+          <div className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1 shadow-sm mt-6">
+            {BILLING_PERIODS.map((p) => (
+              <button
+                key={p.key}
+                onClick={() => setBillingPeriod(p.key)}
+                className={`px-4 py-2 text-xs sm:text-sm font-medium rounded-full transition-colors duration-200 ${
+                  billingPeriod === p.key
+                    ? "bg-slate-900 text-white shadow-sm"
+                    : "text-slate-500 hover:text-slate-900"
+                }`}
+              >
+                {t(p.labelKey)}
+              </button>
+            ))}
+          </div>
+        </div>
 
-          <TabPanel value={value} index={1} dir={theme.direction}>
-            <div className="container mx-auto flex justify-center items-center overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5 gap-4">
-                {displayedCertificates.map((certificate, index) => (
-                  <div
-                    key={certificate.id || index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
-                  >
-                    <Certificate ImgSertif={certificate.Img} />
-                  </div>
-                ))}
-              </div>
-            </div>
-            {certificates.length > initialItems && (
-              <div className="mt-6 w-full flex justify-start">
-                <ToggleButton
-                  onClick={() => toggleShowMore('certificates')}
-                  isShowingMore={showAllCertificates}
-                />
-              </div>
-            )}
-          </TabPanel>
+        {/* Tarjetas de Licencias */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {LICENSE_PRODUCTS.map((product) => {
+            const Icon = product.icon;
+            const price = product.pricing[billingPeriod];
+            const savings = SAVINGS_BY_PERIOD[billingPeriod];
 
-          <TabPanel value={value} index={2} dir={theme.direction}>
-            <div className="container mx-auto flex justify-center items-center overflow-hidden pb-[5%]">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-8 gap-5">
-                {techStacks.map((stack, index) => (
-                  <div
-                    key={index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
-                  >
-                    <TechStackIcon TechStackIcon={stack.icon} Language={stack.language} />
+            return (
+              <div
+                key={product.id}
+                data-aos="fade-up"
+                className={`relative rounded-2xl p-6 sm:p-8 flex flex-col h-full transition-all duration-300 hover:-translate-y-1 ${
+                  product.highlighted
+                    ? "bg-slate-900 border border-slate-900 shadow-xl text-white"
+                    : "bg-white border border-slate-200 shadow-sm hover:shadow-md text-slate-900"
+                }`}
+              >
+                {product.highlighted && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-900 shadow-sm">
+                    {t("portfolio.license.popular")}
+                  </span>
+                )}
+
+                <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${
+                  product.highlighted ? "bg-white/10" : "bg-slate-900 text-white"
+                }`}>
+                  <Icon className="h-5 w-5" />
+                </div>
+
+                <h4 className="text-xl font-bold mb-1.5">{t(product.nameKey)}</h4>
+                <p className={`text-sm leading-relaxed mb-6 ${product.highlighted ? "text-slate-300" : "text-slate-500"}`}>
+                  {t(product.descKey)}
+                </p>
+
+                <div className="mb-6">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-extrabold">Bs {price.toLocaleString()}</span>
+                    <span className={`text-xs ${product.highlighted ? "text-slate-400" : "text-slate-400"}`}>
+                      / {t(`portfolio.license.${billingPeriod}Short`)}
+                    </span>
                   </div>
-                ))}
+                  {savings > 0 && (
+                    <span className={`mt-1 inline-block text-xs font-medium ${
+                      product.highlighted ? "text-emerald-400" : "text-emerald-600"
+                    }`}>
+                      {t("portfolio.license.savings", { percent: savings })}
+                    </span>
+                  )}
+                </div>
+
+                <ul className="space-y-3 mb-8 flex-1">
+                  {product.featureKeys.map((fKey) => (
+                    <li key={fKey} className="flex items-start gap-2 text-sm">
+                      <Check className={`w-4 h-4 mt-0.5 shrink-0 ${product.highlighted ? "text-emerald-400" : "text-emerald-600"}`} />
+                      <span className={product.highlighted ? "text-slate-300" : "text-slate-600"}>
+                        {t(fKey)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <a href="#Contact">
+                  <button className={`w-full py-3 rounded-xl font-medium text-sm transition-colors duration-200 ${
+                    product.highlighted
+                      ? "bg-white text-slate-900 hover:bg-slate-100"
+                      : "bg-slate-900 text-white hover:bg-slate-800"
+                  }`}>
+                    {t("portfolio.license.cta")}
+                  </button>
+                </a>
               </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ============================================================ */}
+      {/* BLOQUE 2: DESARROLLO A LA MEDIDA (¿Qué tipo de proyectos hago?) */}
+      {/* ============================================================ */}
+      <div className="mb-24 rounded-3xl bg-slate-50 border border-slate-200 p-8 sm:p-12" data-aos="fade-up">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
+            {t("portfolio.custom.badge")}
+          </span>
+          <h3 className="text-2xl md:text-4xl font-bold text-slate-900 mt-1">
+            {t("portfolio.custom.title")}
+          </h3>
+          <p className="text-slate-500 text-sm sm:text-base mt-2">
+            {t("portfolio.custom.subtitle")}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {CUSTOM_SERVICES.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <div key={index} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div>
+                  <div className="p-3 bg-slate-900 text-white rounded-xl w-fit mb-4">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-bold text-slate-900 text-lg mb-2">
+                    {t(service.titleKey)}
+                  </h4>
+                  <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
+                    {t(service.descKey)}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="text-center mt-10">
+          <a href="#Contact" className="inline-flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl font-medium text-sm hover:bg-slate-800 transition-colors">
+            {t("portfolio.custom.cta")}
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+
+      {/* ============================================================ */}
+      {/* BLOQUE 3: CASOS DE ÉXITO Y TRABAJOS REALIZADOS               */}
+      {/* ============================================================ */}
+      <div>
+        <div className="text-center mb-10" data-aos="fade-up">
+          <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
+            {t("portfolio.showcase.badge")}
+          </span>
+          <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mt-1">
+            {t("portfolio.showcase.title")}
+          </h3>
+          <p className="text-slate-500 text-sm max-w-md mx-auto mt-2">
+            {t("portfolio.showcase.subtitle")}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
+          {displayedProjects.map((project, index) => (
+            <div key={project.id || index} data-aos="fade-up">
+              <CardProject
+                Img={project.Img}
+                Title={project.Title}
+                Description={project.Description}
+                Link={project.Link}
+                id={project.id}
+              />
             </div>
-          </TabPanel>
-        </SwipeableViews>
-      </Box>
+          ))}
+        </div>
+
+        {projects.length > 4 && (
+          <div className="mt-10 text-center">
+            <button
+              onClick={() => setShowAllProjects(!showAllProjects)}
+              className="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 hover:text-slate-900 rounded-xl text-sm font-medium shadow-sm hover:bg-slate-50 transition-all"
+            >
+              {showAllProjects ? t("portfolio.seeLess") : t("portfolio.seeMore")}
+            </button>
+          </div>
+        )}
+      </div>
+
     </div>
   );
 }

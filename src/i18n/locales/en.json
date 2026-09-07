@@ -1,55 +1,137 @@
 {
   "nav": {
     "home": "Home",
-    "about": "About",
-    "portfolio": "Portfolio",
-    "contact": "Contact"
-  },
-  "home": {
-    "role1": "Full-Stack",
-    "role2": "Developer",
-    "words": [
-      "Scalable Web Systems",
-      "Cloud Infrastructure",
-      "API Development"
-    ],
-    "description": "I build high-performance, full-stack applications tailored for scale. From robust backend architectures in Node.js and Python to highly interactive Next.js interfaces, I deliver end-to-end solutions that drive business value.",
+    "about": "About Us",
     "projects": "Projects",
     "contact": "Contact"
   },
+  "home": {
+    "role1": "The Digital Future of Your",
+    "role2": "Business",
+    "words": ["Performance", "Innovation", "Utility"],
+    "description": "We transform how your business operates. We design and build digital solutions specifically tailored to address your company's unique needs, automate operations, and drive real growth.",
+    "projects": "View Solutions",
+    "contact": "Schedule a Call",
+    "capabilitiesTitle": "What we do for your business",
+    "capabilitiesSubtitle": "Technology built to make your operations simpler, faster, and more profitable.",
+    "capabilities": {
+      "backend": {
+        "title": "Total Management & Control",
+        "desc": "Centralized systems for sales, inventory, and automated reporting that simplify decision-making."
+      },
+      "mobile": {
+        "title": "Custom Software",
+        "desc": "Unique digital tools built from scratch to match your company's exact operational logic."
+      },
+      "database": {
+        "title": "Digital Modernization",
+        "desc": "We transition your manual spreadsheets and paper workflows into secure platforms accessible anywhere."
+      }
+    },
+    "ctaTitle": "Ready to scale your business?",
+    "ctaSubtitle": "Tell us about your business challenges, and let's build the right system for you."
+  },
   "about": {
-    "title": "About Me",
-    "subtitle": "Building precise solutions for complex business logic",
-    "greeting": "Hello, I'm Yoel,",
-    "description": "I am a Full-Stack Developer with a strong engineering mindset focused on systems logic and performance optimization. My focus is on architecting scalable web applications, designing efficient relational databases with PostgreSQL, and deploying cloud-ready solutions on AWS and Vercel. I thrive on translating complex technical requirements into seamless, high-performing digital products.",
-    "quote": "Delivering reliable software through solid engineering principles.",
-    "downloadCv": "Download CV",
-    "viewProjects": "View Projects",
+    "title": "About Us",
+    "heroTitle": "We build software that simplifies and scales your business.",
+    "description": "At Lumen, we turn operational complexity into simple, agile, and efficient digital platforms. We analyze your company's real needs to craft custom tools that automate workflows and support your growth.",
+    "promiseTitle": "Our Quality Commitment",
+    "quote": "We deliver reliable, maintainable software tailored specifically to your business goals.",
+    "teamTitle": "Founding Team",
+    "team": {
+      "developer": {
+        "role": "Lead Developer",
+        "bio": "Ensures technical performance, security, and top-tier architecture for every system."
+      },
+      "pm": {
+        "role": "Project Director",
+        "bio": "Guarantees smooth communication, timely deliveries, and alignment with your goals."
+      }
+    },
     "stats": {
-      "projects": "Production Apps",
-      "projectsDesc": "End-to-end solutions deployed",
-      "certificates": "Certifications",
-      "certificatesDesc": "Continuous technical growth",
-      "experience": "Years coding",
-      "experienceDesc": "Solving complex problems"
+      "projects": "Systems Deployed",
+      "projectsDesc": "Active solutions empowering businesses",
+      "certificates": "Quality Assurance",
+      "certificatesDesc": "Modern standards & best practices",
+      "experience": "Years of Experience",
+      "experienceDesc": "Delivering reliable & useful technology"
     }
   },
   "portfolio": {
-    "title": "Portfolio Showcase",
-    "subtitle": "A technical breakdown of my recent work, highlighting architecture decisions, database modeling, and cloud deployments.",
-    "seeMore": "See More",
-    "seeLess": "See Less",
-    "tabs": {
-      "projects": "Projects",
-      "certificates": "Certificates",
-      "techStack": "Tech Stack"
+    "title": "Solutions & Products",
+    "subtitle": "From ready-to-deploy software licenses to 100% custom-built platforms.",
+    "seeMore": "See more projects",
+    "seeLess": "See less",
+    "license": {
+      "badge": "Ready-to-use Software",
+      "title": "Software Licensing",
+      "intro": "Choose the ideal plan for your business. Fast deployment and cloud setup included.",
+      "monthly": "Monthly",
+      "quarterly": "Quarterly",
+      "annual": "Annual",
+      "monthlyShort": "mo",
+      "quarterlyShort": "qtr",
+      "annualShort": "yr",
+      "savings": "Save {{percent}}%",
+      "popular": "Most popular",
+      "cta": "Get License",
+      "products": {
+        "sales": {
+          "name": "Sales & Invoicing System",
+          "desc": "Manage daily sales, customers, and inventory in a single intuitive dashboard.",
+          "f1": "Fast & intuitive admin dashboard",
+          "f2": "Automated daily reports",
+          "f3": "Technical support and maintenance included"
+        },
+        "booking": {
+          "name": "Booking Platform",
+          "desc": "Online appointment and automated scheduling for service businesses.",
+          "f1": "Real-time calendar & management",
+          "f2": "Automated client reminders",
+          "f3": "Configurable multi-user access"
+        },
+        "inventory": {
+          "name": "Inventory & Stock Panel",
+          "desc": "Total control over warehouses, stock entries, exits, and alerts.",
+          "f1": "Multi-warehouse management",
+          "f2": "Automated low-stock alerts",
+          "f3": "Data export to Excel"
+        }
+      }
+    },
+    "custom": {
+      "badge": "Engineering Services",
+      "title": "Custom Software Development",
+      "subtitle": "Have unique business rules or workflows? We build the exact software you need.",
+      "cta": "Request a Custom Quote",
+      "webSystems": {
+        "title": "Web Systems & Dashboards",
+        "desc": "Centralized admin panels to monitor and manage your entire business operation."
+      },
+      "mobile": {
+        "title": "Mobile Applications",
+        "desc": "iOS and Android apps so your team or clients can operate from anywhere."
+      },
+      "websites": {
+        "title": "Corporate Web Platforms",
+        "desc": "Fast, modern websites optimized to turn visitors into paying clients."
+      },
+      "integrations": {
+        "title": "Integrations & APIs",
+        "desc": "We connect your software with payment gateways, electronic invoicing, or WhatsApp."
+      }
+    },
+    "showcase": {
+      "badge": "Case Studies",
+      "title": "Featured Projects",
+      "subtitle": "A glimpse into some of the digital solutions we have crafted and deployed."
     }
   },
   "contact": {
     "title": "Let's connect",
-    "subtitle": "Whether you have a complex technical problem to solve or a project in mind, I'm ready to help you build it.",
+    "subtitle": "Whether you need to automate a process or build a system from scratch, we're ready to help you.",
     "cardTitle": "Get in touch",
-    "cardSubtitle": "Send me an email and let's discuss your system requirements.",
+    "cardSubtitle": "Send us an email and let's discuss your company's requirements.",
     "form": {
       "name": "Name",
       "email": "Email",
