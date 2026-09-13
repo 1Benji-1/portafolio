@@ -57,75 +57,115 @@
       "experienceDesc": "Delivering reliable & useful technology"
     }
   },
-  "portfolio": {
+  "website": {
     "title": "Solutions & Products",
     "subtitle": "From ready-to-deploy software licenses to 100% custom-built platforms.",
     "seeMore": "See more projects",
     "seeLess": "See less",
-    "license": {
-      "badge": "Ready-to-use Software",
-      "title": "Software Licensing",
-      "intro": "Choose the ideal plan for your business. Fast deployment and cloud setup included.",
-      "monthly": "Monthly",
-      "quarterly": "Quarterly",
-      "annual": "Annual",
-      "monthlyShort": "mo",
-      "quarterlyShort": "qtr",
-      "annualShort": "yr",
-      "savings": "Save {{percent}}%",
-      "popular": "Most popular",
-      "cta": "Get License",
-      "products": {
-        "sales": {
-          "name": "Sales & Invoicing System",
-          "desc": "Manage daily sales, customers, and inventory in a single intuitive dashboard.",
-          "f1": "Fast & intuitive admin dashboard",
-          "f2": "Automated daily reports",
-          "f3": "Technical support and maintenance included"
+    "pos": {
+      "badge": "COMING SOON",
+      "title": "Lumen POS",
+      "subtitle": "The most complete and scalable Point of Sale system for your business. Manage sales, inventory, and streamline operations with our tailored plans.",
+      "billing": {
+        "monthly": "Monthly",
+        "quarterly": "Quarterly",
+        "annual": "Annual",
+        "save15": "Save 15%",
+        "save25": "Save 25%",
+        "billedMonthly": "Billed monthly",
+        "billedQuarterly": "Billed quarterly",
+        "billedAnnually": "Billed annually"
+      },
+      "popular": "Most Popular",
+      "cta": "Book my free trial",
+      "contactMsg": "I want to book my free trial for Lumen POS",
+      "plans": {
+        "standard": {
+          "desc": "Ideal for small businesses starting out and needing control.",
+          "f1": "Point of Sale (POS) Module",
+          "f2": "Basic inventory management",
+          "f3": "1 Active user",
+          "f4": "Standard support"
         },
-        "booking": {
-          "name": "Booking Platform",
-          "desc": "Online appointment and automated scheduling for service businesses.",
-          "f1": "Real-time calendar & management",
-          "f2": "Automated client reminders",
-          "f3": "Configurable multi-user access"
+        "pro": {
+          "desc": "Advanced features for growing businesses looking to scale.",
+          "f1": "Everything in Standard plan",
+          "f2": "Advanced reports & analytics",
+          "f3": "Up to 5 users",
+          "f4": "Priority support"
         },
-        "inventory": {
-          "name": "Inventory & Stock Panel",
-          "desc": "Total control over warehouses, stock entries, exits, and alerts.",
-          "f1": "Multi-warehouse management",
-          "f2": "Automated low-stock alerts",
-          "f3": "Data export to Excel"
+        "enterprise": {
+          "desc": "Comprehensive solution for large operations with multiple branches.",
+          "f1": "Everything in Pro plan",
+          "f2": "Multi-branch management",
+          "f3": "Unlimited users",
+          "f4": "24/7 Dedicated support"
         }
       }
     },
     "custom": {
-      "badge": "Engineering Services",
-      "title": "Custom Software Development",
-      "subtitle": "Have unique business rules or workflows? We build the exact software you need.",
-      "cta": "Request a Custom Quote",
-      "webSystems": {
-        "title": "Web Systems & Dashboards",
-        "desc": "Centralized admin panels to monitor and manage your entire business operation."
-      },
-      "mobile": {
-        "title": "Mobile Applications",
-        "desc": "iOS and Android apps so your team or clients can operate from anywhere."
-      },
-      "websites": {
-        "title": "Corporate Web Platforms",
-        "desc": "Fast, modern websites optimized to turn visitors into paying clients."
-      },
-      "integrations": {
-        "title": "Integrations & APIs",
-        "desc": "We connect your software with payment gateways, electronic invoicing, or WhatsApp."
+      "badge": "CUSTOM DEVELOPMENT",
+      "title": "If you can imagine it, we can build it",
+      "subtitle": "No matter the scale or complexity. We design, build, and maintain the exact software your company needs.",
+      "cta": "Tell us about your project",
+      "contactMsg": "Hello! I'd like to tell you about a custom project I want to develop.",
+      "services": {
+        "webSystems": {
+          "badge": "Management & Operations",
+          "title": "Web Systems & Control Panels",
+          "desc": "We digitize and automate your business operations with centralized, intuitive dashboards built for your daily workflows.",
+          "h1": "Real-time metrics",
+          "h2": "Role & access control",
+          "h3": "Automated workflows"
+        },
+        "mobile": {
+          "badge": "iOS & Android",
+          "title": "Mobile Applications",
+          "desc": "Put your services in your customers' hands or equip your field teams with fast, modern, and user-friendly apps.",
+          "h1": "Intuitive UX/UI design",
+          "h2": "Notifications & alerts",
+          "h3": "Cloud synchronization"
+        },
+        "platforms": {
+          "badge": "Sales & Presence",
+          "title": "Web Platforms & Portals",
+          "desc": "High-performance corporate sites and transactional portals crafted to turn visitors into loyal customers.",
+          "h1": "Ultra-fast load times",
+          "h2": "Mobile-optimized",
+          "h3": "Catalogs & self-service"
+        },
+        "integrations": {
+          "badge": "Connectivity",
+          "title": "Integrations & APIs",
+          "desc": "We integrate your digital ecosystem: payment gateways, electronic invoicing, WhatsApp, CRMs, and existing tools.",
+          "h1": "Local payment gateways",
+          "h2": "WhatsApp & automations",
+          "h3": "Secure & scalable APIs"
+        }
       }
     },
     "showcase": {
       "badge": "Case Studies",
       "title": "Featured Projects",
-      "subtitle": "A glimpse into some of the digital solutions we have crafted and deployed."
+      "subtitle": "A glimpse into some of the digital solutions we have crafted and deployed.",
+      "seeDetails": "View details"
     }
+  },
+  "projectDetail": {
+    "back": "Back",
+    "projects": "Projects",
+    "technologies": "Technologies",
+    "keyFeatures": "Key Features",
+    "technologiesUsed": "Technologies Used",
+    "noTechnologies": "No technologies specified.",
+    "featuredCapabilities": "Key Features",
+    "noFeatures": "No features added.",
+    "viewCode": "View Code",
+    "privateRepo": "Private Code",
+    "privateRepoTitle": "Private Repository",
+    "privateRepoDesc": "The source code for this project is proprietary to the client.",
+    "understood": "Understood",
+    "loading": "Loading Project..."
   },
   "contact": {
     "title": "Let's connect",

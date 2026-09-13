@@ -20,6 +20,28 @@ const ContactPage = () => {
     AOS.init({
       once: false,
     });
+
+    // Pre-fill message from URL query param (if coming from external link)
+    const params = new URLSearchParams(window.location.search);
+    const prefilledMsg = params.get("msg");
+    if (prefilledMsg) {
+      setFormData((prev) => ({ ...prev, message: prefilledMsg }));
+      window.history.replaceState({}, "", window.location.pathname + window.location.hash);
+      setTimeout(() => {
+        const contactEl = document.getElementById("Contact");
+        if (contactEl) contactEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 300);
+    }
+
+    // In-page smooth event listener (no page reload)
+    const handlePrefill = (e) => {
+      if (e.detail?.message) {
+        setFormData((prev) => ({ ...prev, message: e.detail.message }));
+      }
+    };
+
+    window.addEventListener("prefill-contact", handlePrefill);
+    return () => window.removeEventListener("prefill-contact", handlePrefill);
   }, []);
 
   const handleChange = (e) => {
@@ -42,13 +64,13 @@ const ContactPage = () => {
   });
 
   try {
-    const formSubmitUrl = "https://formsubmit.co/ajax/yoelbulaciavaca178@gmail.com";
+    const formSubmitUrl = "https://formsubmit.co/ajax/Lumenvaca178@gmail.com";
 
     const submitData = {
       name: formData.name,
       email: formData.email,
       message: formData.message,
-      _subject: "Nuevo Mensaje de tu Portafolio Web",
+      _subject: "Nuevo Mensaje de tu Website Web",
       _captcha: "false",
       _template: "table",
       _replyto: formData.email,

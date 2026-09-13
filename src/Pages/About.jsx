@@ -10,11 +10,11 @@ import { useTranslation } from "react-i18next"
 
 const TEAM = [
   {
-    name: "Yoel Bulacia",
-    photo: "team-yoel.jpg",
+    name: "Lumen",
+    photo: "team-Lumen.jpg",
     roleKey: "developer",
-    linkedin: "https://www.linkedin.com/in/bulacia-yoel/",
-    github: "https://github.com/1Benji-1",
+    linkedin: "https://www.linkedin.com/in/Lumen-Lumen/",
+    github: "https://github.com/lumen-org",
   },
   {
     name: "Isabel Vaquera",

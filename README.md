@@ -1,10 +1,10 @@
-# Comrad
+# Lumen
 
 ¡Hola a todos! 👋
 
-Permíteme presentarme. Soy **Yoel Bulacia**. En esta ocasión quiero compartir el proyecto **Comrad**, una aplicación web desarrollada con React y Supabase que cuenta con un sitio público y un panel de administración.
+Permíteme presentarme. Soy **Lumen**. En esta ocasión quiero compartir el proyecto **Lumen**, una aplicación web desarrollada con React y Supabase que cuenta con un sitio público y un panel de administración.
 
-**🌐 Demo en vivo:** https://iscomrad.vercel.app
+**🌐 Demo en vivo:** https://islumen.vercel.app
 
 ---
 
@@ -123,7 +123,7 @@ CREATE TABLE public.certificates (
   created_at timestamptz DEFAULT now()
 );
 
-CREATE TABLE public.portfolio_comments (
+CREATE TABLE public.website_comments (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   content text NOT NULL,
   user_name text NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE public.profiles (
 -- ============================
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.certificates ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.portfolio_comments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.website_comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "public read projects"
@@ -154,10 +154,10 @@ CREATE POLICY "public read certificates"
 ON public.certificates FOR SELECT USING (true);
 
 CREATE POLICY "public read comments"
-ON public.portfolio_comments FOR SELECT USING (true);
+ON public.website_comments FOR SELECT USING (true);
 
 CREATE POLICY "public insert comment"
-ON public.portfolio_comments FOR INSERT
+ON public.website_comments FOR INSERT
 WITH CHECK (is_pinned = false);
 
 CREATE POLICY "admin manage projects"
@@ -179,7 +179,7 @@ USING (
 );
 
 CREATE POLICY "admin manage comments"
-ON public.portfolio_comments FOR UPDATE, DELETE
+ON public.website_comments FOR UPDATE, DELETE
 USING (
   EXISTS (
     SELECT 1 FROM public.profiles
@@ -233,7 +233,7 @@ USING (bucket_id = 'certificate-images');
 
 Ve a:
 
-**Table Editor → portfolio_comments → Enable Realtime**
+**Table Editor → website_comments → Enable Realtime**
 
 ---
 
@@ -332,10 +332,10 @@ a tu proveedor de hosting preferido.
 
 # 👨‍💻 Créditos y Contacto
 
-**Yoel Bulacia**
+**Lumen**
 
-🌐 Sitio Web: https://iscomrad.vercel.app
+🌐 Sitio Web: https://islumen.vercel.app
 
 Si este proyecto te resultó útil, considera darle una ⭐ al repositorio.
 
-¡Gracias por visitar Comrad!
+¡Gracias por visitar Lumen!

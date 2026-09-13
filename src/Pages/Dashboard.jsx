@@ -41,7 +41,7 @@ export default function Dashboard() {
       {/* Badge */}
       <div className="shrink-0 px-3 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center gap-2">
         <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-        <span className="text-indigo-300 text-xs font-medium">Portfolio Manager</span>
+        <span className="text-indigo-300 text-xs font-medium">Website Manager</span>
       </div>
 
       {/* Nav */}

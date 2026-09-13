@@ -228,7 +228,7 @@ const ProjectForm = ({
             label="Project Title"
             value={form.Title}
             onChange={set("Title")}
-            placeholder="e.g. My Portfolio Website"
+            placeholder="e.g. My Website Website"
             required
           />
         </div>

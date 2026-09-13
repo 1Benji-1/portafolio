@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, memo } from "react"
+import React, { useState, useEffect, useCallback, useRef, memo } from "react"
 import { Helmet } from "react-helmet-async"
 import {
   Github,
@@ -10,6 +10,7 @@ import {
 import { useTranslation } from "react-i18next"
 import AOS from "aos"
 import "aos/dist/aos.css"
+import { supabase } from "../supabase"
 
 /* ------------------------------------------------------------------ */
 /*  Static data                                                       */
@@ -20,9 +21,9 @@ const ERASING_SPEED = 50
 const PAUSE_DURATION = 2000
 
 const SOCIAL_LINKS = [
-  { icon: Github, link: "https://github.com/1Benji-1", label: "GitHub Profile" },
-  { icon: Linkedin, link: "https://www.linkedin.com/in/bulacia-yoel/", label: "LinkedIn Profile" },
-  { icon: Instagram, link: "https://www.instagram.com/bulacia_yoel/?hl=id", label: "Instagram Profile" },
+  { icon: Github, link: "https://github.com/lumen-org", label: "GitHub Profile" },
+  { icon: Linkedin, link: "https://www.linkedin.com/in/Lumen-Lumen/", label: "LinkedIn Profile" },
+  { icon: Instagram, link: "https://www.instagram.com/Lumen_Lumen/?hl=id", label: "Instagram Profile" },
 ]
 
 /* Terminal boot sequence — decorative, updated for corporate context */
@@ -37,8 +38,18 @@ const TERMINAL_LINES = [
   "[✓] Secure API endpoints exposed",
   "[✓] Deployed to production",
   "",
-  "System operational. Let's talk ↓",
+  "System operational. Try typing a command below ↓",
 ]
+
+/* Terminal typing animation timing */
+const LINE_TYPING_SPEED = 22 // ms per character
+const LINE_PAUSE = 250 // pause after finishing a non-empty line
+const EMPTY_LINE_PAUSE = 120 // pause after an empty line
+
+/* Secret command — the actual coupon code + claim limit live in Supabase,
+   not here. This file only knows the command that triggers the check. */
+const SECRET_COMMAND = "lumen --version"
+const SECRET_COUPON_CODE = "LUMEN25" // must match the "code" seeded in Supabase
 
 /* ------------------------------------------------------------------ */
 /*  Small presentational components                                   */
@@ -82,6 +93,219 @@ const SocialLink = memo(({ icon: Icon, link, label }) => (
     <Icon className="h-4.5 w-4.5 text-slate-500 transition-colors group-hover:text-slate-900" />
   </a>
 ))
+
+/* ------------------------------------------------------------------ */
+/*  Interactive terminal                                               */
+/* ------------------------------------------------------------------ */
+
+const InteractiveTerminal = () => {
+  const [typedLines, setTypedLines] = useState([])
+  const [lineIndex, setLineIndex] = useState(0)
+  const [charIndex, setCharIndex] = useState(0)
+  const [bootComplete, setBootComplete] = useState(false)
+
+  const [command, setCommand] = useState("")
+  const [history, setHistory] = useState([]) // { id, command, responseLines, tone }
+  const [isChecking, setIsChecking] = useState(false)
+
+  const inputRef = useRef(null)
+  const scrollRef = useRef(null)
+  const entryIdRef = useRef(0)
+
+  /* Type out the boot sequence, line by line, character by character */
+  useEffect(() => {
+    if (bootComplete) return
+
+    if (lineIndex >= TERMINAL_LINES.length) {
+      setBootComplete(true)
+      return
+    }
+
+    const currentLine = TERMINAL_LINES[lineIndex]
+
+    if (charIndex < currentLine.length) {
+      const timeout = setTimeout(() => {
+        setTypedLines((prev) => {
+          const updated = [...prev]
+          updated[lineIndex] = currentLine.slice(0, charIndex + 1)
+          return updated
+        })
+        setCharIndex((prev) => prev + 1)
+      }, LINE_TYPING_SPEED)
+      return () => clearTimeout(timeout)
+    }
+
+    const timeout = setTimeout(
+      () => {
+        setLineIndex((prev) => prev + 1)
+        setCharIndex(0)
+      },
+      currentLine === "" ? EMPTY_LINE_PAUSE : LINE_PAUSE
+    )
+    return () => clearTimeout(timeout)
+  }, [lineIndex, charIndex, bootComplete])
+
+  /* Focus the input once the boot animation finishes ONLY IF user is still in the hero section */
+  useEffect(() => {
+    if (bootComplete) {
+      if (window.scrollY < 150) {
+        inputRef.current?.focus({ preventScroll: true })
+      }
+    }
+  }, [bootComplete])
+
+  /* Keep the terminal scrolled to the latest line */
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [typedLines, history, bootComplete, isChecking])
+
+  const appendEntry = useCallback((command, responseLines, tone = "muted") => {
+    entryIdRef.current += 1
+    setHistory((prev) => [...prev, { id: entryIdRef.current, command, responseLines, tone }])
+  }, [])
+
+  const updateEntry = useCallback((id, responseLines, tone) => {
+    setHistory((prev) =>
+      prev.map((entry) => (entry.id === id ? { ...entry, responseLines, tone } : entry))
+    )
+  }, [])
+
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault()
+      const trimmed = command.trim()
+      if (!trimmed || isChecking) return
+      setCommand("")
+
+      const normalized = trimmed.toLowerCase()
+
+      if (normalized === "clear") {
+        setHistory([])
+        return
+      }
+
+      if (normalized === "help" || normalized === "--help") {
+        appendEntry(trimmed, ["Comandos disponibles: lumen --version, clear"], "muted")
+        return
+      }
+
+      if (normalized !== SECRET_COMMAND) {
+        appendEntry(trimmed, [`zsh: command not found: ${trimmed}`], "muted")
+        return
+      }
+
+      /* Secret command: ask Supabase, since the coupon pool and the
+         5-claim limit live server-side, not in this file. */
+      entryIdRef.current += 1
+      const entryId = entryIdRef.current
+      setHistory((prev) => [
+        ...prev,
+        { id: entryId, command: trimmed, responseLines: ["Verificando disponibilidad..."], tone: "muted" },
+      ])
+      setIsChecking(true)
+
+      try {
+        const { data, error } = await supabase.rpc("claim_secret_coupon", {
+          p_code: SECRET_COUPON_CODE,
+        })
+
+        if (error) throw error
+
+        const result = Array.isArray(data) ? data[0] : data
+
+        if (result?.claimed) {
+          updateEntry(
+            entryId,
+            [
+              "v2.5.0",
+              "🎉 ¡Código secreto desbloqueado!",
+              `25% de descuento — código: ${result.code}`,
+              `Cupones restantes: ${result.remaining}`,
+            ],
+            "success"
+          )
+        } else {
+          updateEntry(
+            entryId,
+            ["v2.5.0", "Ya se reclamaron los 5 cupones disponibles. ¡La próxima vez sé más rápido!"],
+            "muted"
+          )
+        }
+      } catch (err) {
+        updateEntry(entryId, ["Error al verificar el cupón. Intenta de nuevo más tarde."], "muted")
+      } finally {
+        setIsChecking(false)
+      }
+    },
+    [command, isChecking, appendEntry, updateEntry]
+  )
+
+  return (
+    <div className="relative w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 shadow-2xl">
+      {/* Title bar with macOS-style traffic lights */}
+      <div className="flex h-10 shrink-0 items-center gap-2 border-b border-slate-800 bg-slate-900 px-4">
+        <div className="h-3 w-3 rounded-full bg-red-500" />
+        <div className="h-3 w-3 rounded-full bg-yellow-500" />
+        <div className="h-3 w-3 rounded-full bg-green-500" />
+        <span className="ml-2 text-xs text-slate-500">lumen@terminal ~ %</span>
+      </div>
+
+      {/* Body */}
+      <div
+        ref={scrollRef}
+        onClick={() => bootComplete && inputRef.current?.focus({ preventScroll: true })}
+        className="flex h-[280px] flex-col overflow-y-auto p-6 font-mono text-xs leading-relaxed text-emerald-400/80 sm:h-[360px] sm:text-sm"
+      >
+        <div className="mt-auto">
+          {/* Boot sequence */}
+          {typedLines.map((line, i) => (
+            <div key={i} className={line === "" ? "h-3" : ""}>
+              {line}
+            </div>
+          ))}
+          {!bootComplete && <span className="animate-pulse">_</span>}
+
+          {/* Interactive prompt, shown once boot animation finishes */}
+          {bootComplete && (
+            <>
+              {history.map((entry) => (
+                <div key={entry.id} className="mt-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-slate-500">lumen@terminal ~ %</span>
+                    <span className="text-slate-200">{entry.command}</span>
+                  </div>
+                  {entry.responseLines.map((line, j) => (
+                    <div key={j} className={entry.tone === "success" ? "text-yellow-400" : "text-slate-500"}>
+                      {line}
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+              <form onSubmit={handleSubmit} className="mt-2 flex items-center gap-2">
+                <span className="shrink-0 text-slate-500">lumen@terminal ~ %</span>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={command}
+                  onChange={(e) => setCommand(e.target.value)}
+                  disabled={isChecking}
+                  className="w-full min-w-0 flex-1 bg-transparent text-emerald-400 outline-none caret-emerald-400 disabled:opacity-50"
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  spellCheck="false"
+                  aria-label="Terminal command input"
+                />
+              </form>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 /* ------------------------------------------------------------------ */
 /*  Main component                                                    */
@@ -149,13 +373,13 @@ const Home = () => {
           content="Lumen desarrolla software a la medida para empresas y PyMEs. Soluciones digitales diseñadas para optimizar procesos, controlar ventas e impulsarte al siguiente nivel."
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://comrad.vercel.app" />
+        <link rel="canonical" href="https://lumen.vercel.app" />
         <meta property="og:title" content="Lumen — El Futuro Digital de tu Empresa" />
         <meta
           property="og:description"
           content="Desarrollo de software a la medida, automatización e infraestructura en la nube para empresas que buscan crecer."
         />
-        <meta property="og:url" content="https://comrad.vercel.app" />
+        <meta property="og:url" content="https://lumen.vercel.app" />
         <meta property="og:type" content="website" />
       </Helmet>
 
@@ -168,7 +392,7 @@ const Home = () => {
       >
         <GridBackground />
 
-        <div className="relative z-10 mx-auto max-w-6xl px-6 pb-24 pt-24 sm:px-8 sm:pt-28 lg:px-10">
+        <div className="relative z-10 mx-auto max-w-6xl px-6 pb-4 sm:pb-8 pt-24 sm:px-8 sm:pt-28 lg:px-10">
           {/* ---------------------------------------------------------- */}
           {/* Hero                                                       */}
           {/* ---------------------------------------------------------- */}
@@ -219,22 +443,7 @@ const Home = () => {
               data-aos="fade-left"
               data-aos-delay="400"
             >
-              <div className="relative w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 shadow-2xl">
-                <div className="flex h-10 shrink-0 items-center gap-2 border-b border-slate-800 bg-slate-900 px-4">
-                  <div className="h-3 w-3 rounded-full bg-slate-700" />
-                  <div className="h-3 w-3 rounded-full bg-slate-700" />
-                  <div className="h-3 w-3 rounded-full bg-slate-700" />
-                  <span className="ml-2 text-xs text-slate-500">lumen@terminal ~ %</span>
-                </div>
-                <div className="flex min-h-[280px] flex-col justify-end p-6 font-mono text-xs leading-relaxed text-emerald-400/80 sm:min-h-[360px] sm:text-sm">
-                  {TERMINAL_LINES.map((line, i) => (
-                    <div key={i} className={line === "" ? "h-3" : ""}>
-                      {line}
-                    </div>
-                  ))}
-                  <span className="animate-pulse">_</span>
-                </div>
-              </div>
+              <InteractiveTerminal />
             </div>
           </div>
         </div>

@@ -57,75 +57,115 @@
       "experienceDesc": "Creando tecnología útil y confiable"
     }
   },
-  "portfolio": {
+  "website": {
     "title": "Soluciones & Productos",
     "subtitle": "Desde software listo para desplegar hasta plataformas construidas 100% a la medida.",
     "seeMore": "Ver más proyectos",
     "seeLess": "Ver menos",
-    "license": {
-      "badge": "Software Listo para Usar",
-      "title": "Licencias de Software",
-      "intro": "Elige el plan ideal para tu negocio. Instalación rápida e infraestructura lista.",
-      "monthly": "Mensual",
-      "quarterly": "Trimestral",
-      "annual": "Anual",
-      "monthlyShort": "mes",
-      "quarterlyShort": "trimestre",
-      "annualShort": "año",
-      "savings": "Ahorras un {{percent}}%",
-      "popular": "Más elegido",
-      "cta": "Adquirir Licencia",
-      "products": {
-        "sales": {
-          "name": "Sistema de Ventas y Facturación",
-          "desc": "Gestión de ventas, clientes e inventario en un solo panel intuitivo.",
-          "f1": "Panel de administración rápido e intuitivo",
-          "f2": "Reportes diarios e informes automáticos",
-          "f3": "Soporte técnico y mantenimiento incluido"
+    "pos": {
+      "badge": "PRÓXIMAMENTE",
+      "title": "Lumen POS",
+      "subtitle": "El sistema de Punto de Venta más completo y escalable para tu negocio. Controla ventas, inventarios y mejora tu gestión operativa con nuestros planes a la medida.",
+      "billing": {
+        "monthly": "Mensual",
+        "quarterly": "Trimestral",
+        "annual": "Anual",
+        "save15": "Ahorra 15%",
+        "save25": "Ahorra 25%",
+        "billedMonthly": "Facturado mensualmente",
+        "billedQuarterly": "Facturado cada 3 meses",
+        "billedAnnually": "Facturado anualmente"
+      },
+      "popular": "El Más Elegido",
+      "cta": "Reservar mi prueba gratuita",
+      "contactMsg": "Quiero reservar mi prueba gratuita de Lumen POS",
+      "plans": {
+        "standard": {
+          "desc": "Ideal para pequeños negocios que están empezando y necesitan control.",
+          "f1": "Módulo de Punto de Venta (POS)",
+          "f2": "Gestión básica de inventario",
+          "f3": "1 Usuario activo",
+          "f4": "Soporte estándar"
         },
-        "booking": {
-          "name": "Plataforma de Reservas",
-          "desc": "Agenda y reservas online automáticas para negocios de servicios.",
-          "f1": "Calendario y gestión en tiempo real",
-          "f2": "Recordatorios automáticos para clientes",
-          "f3": "Acceso multiusuario configurable"
+        "pro": {
+          "desc": "Funcionalidades avanzadas para negocios en crecimiento que buscan escalar.",
+          "f1": "Todo lo del plan Standard",
+          "f2": "Reportes avanzados y métricas",
+          "f3": "Hasta 5 usuarios",
+          "f4": "Soporte prioritario"
         },
-        "inventory": {
-          "name": "Panel de Inventario y Stock",
-          "desc": "Control total de almacenes, entradas, salidas y alertas de stock.",
-          "f1": "Gestión de múltiples almacenes",
-          "f2": "Alertas automáticas de stock bajo",
-          "f3": "Exportación de reportes a Excel"
+        "enterprise": {
+          "desc": "Solución integral para grandes operaciones con múltiples sucursales.",
+          "f1": "Todo lo del plan Pro",
+          "f2": "Gestión de múltiples sucursales",
+          "f3": "Usuarios ilimitados",
+          "f4": "Soporte dedicado 24/7"
         }
       }
     },
     "custom": {
-      "badge": "Servicios de Ingeniería",
-      "title": "Desarrollo de Software a la Medida",
-      "subtitle": "¿Tu empresa tiene reglas o procesos únicos? Diseñamos el sistema exacto que necesitas.",
-      "cta": "Solicitar Cotización a Medida",
-      "webSystems": {
-        "title": "Sistemas Web & Dashboards",
-        "desc": "Paneles de administración centralizados para controlar cada aspecto de tu operación."
-      },
-      "mobile": {
-        "title": "Aplicaciones Móviles",
-        "desc": "Apps para iOS y Android que permiten a tus clientes o equipo operar desde cualquier lugar."
-      },
-      "websites": {
-        "title": "Plataformas Web Corporativas",
-        "desc": "Sitios web rápidos, modernos y optimizados para convertir visitantes en clientes."
-      },
-      "integrations": {
-        "title": "Integraciones & APIs",
-        "desc": "Conectamos tu sistema actual con pasarelas de pago, facturación electrónica o WhatsApp."
+      "badge": "DESARROLLO A LA MEDIDA",
+      "title": "Si lo podés imaginar, lo podemos desarrollar",
+      "subtitle": "No importa el tamaño ni la complejidad. Diseñamos, construimos y mantenemos el software exacto que tu empresa necesita.",
+      "cta": "Contanos tu proyecto",
+      "contactMsg": "¡Hola! Me gustaría contarles sobre un proyecto que quiero desarrollar a la medida.",
+      "services": {
+        "webSystems": {
+          "badge": "Gestión & Operaciones",
+          "title": "Sistemas Web & Paneles de Control",
+          "desc": "Digitalizamos y automatizamos la operativa de tu negocio con paneles centralizados, intuitivos y diseñados para tu día a día.",
+          "h1": "Métricas en tiempo real",
+          "h2": "Control de roles y accesos",
+          "h3": "Flujos automatizados"
+        },
+        "mobile": {
+          "badge": "iOS & Android",
+          "title": "Aplicaciones Móviles",
+          "desc": "Llevá tu servicio a las manos de tus clientes o equipá a tu equipo en terreno con apps veloces, modernas y fáciles de usar.",
+          "h1": "Diseño UX/UI intuitivo",
+          "h2": "Notificaciones y alertas",
+          "h3": "Sincronización en la nube"
+        },
+        "platforms": {
+          "badge": "Ventas & Presencia",
+          "title": "Plataformas Web & Portales",
+          "desc": "Sitios corporativos y portales transaccionales de alto rendimiento pensados para convertir visitas en clientes reales.",
+          "h1": "Carga ultra rápida",
+          "h2": "Optimizado para móviles",
+          "h3": "Catálogos y autogestión"
+        },
+        "integrations": {
+          "badge": "Conectividad",
+          "title": "Integraciones & APIs",
+          "desc": "Conectamos tu ecosistema digital: pasarelas de pago, facturación electrónica, WhatsApp, CRMs y sistemas existentes.",
+          "h1": "Pasarelas de pago locales",
+          "h2": "WhatsApp y automatizaciones",
+          "h3": "APIs seguras y escalables"
+        }
       }
     },
     "showcase": {
       "badge": "Casos de Éxito",
       "title": "Proyectos Destacados",
-      "subtitle": "Un vistazo a algunas de las soluciones digitales que hemos construido e implementado."
+      "subtitle": "Un vistazo a algunas de las soluciones digitales que hemos construido e implementado.",
+      "seeDetails": "Ver más detalles"
     }
+  },
+  "projectDetail": {
+    "back": "Volver",
+    "projects": "Proyectos",
+    "technologies": "Tecnologías",
+    "keyFeatures": "Funcionalidades Clave",
+    "technologiesUsed": "Tecnologías Utilizadas",
+    "noTechnologies": "Sin tecnologías especificadas.",
+    "featuredCapabilities": "Funcionalidades Destacadas",
+    "noFeatures": "Sin funcionalidades añadidas.",
+    "viewCode": "Ver Código",
+    "privateRepo": "Código Privado",
+    "privateRepoTitle": "Código Privado",
+    "privateRepoDesc": "El código fuente de este proyecto es de propiedad privada del cliente.",
+    "understood": "Entendido",
+    "loading": "Cargando Proyecto..."
   },
   "contact": {
     "title": "Hablemos",

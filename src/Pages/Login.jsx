@@ -42,7 +42,7 @@ export default function Login() {
                 <span className="text-neutral-300 text-xs font-medium">Admin Portal</span>
               </div>
               <h1 className="text-3xl font-bold text-white">Welcome Back</h1>
-              <p className="text-gray-400 text-sm">Sign in to manage your portfolio</p>
+              <p className="text-gray-400 text-sm">Sign in to manage your website</p>
             </div>
 
             {/* Form */}

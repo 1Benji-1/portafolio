@@ -13,7 +13,7 @@ import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-const Portofolio = lazy(() => import("./Pages/Portofolio"));
+const Website = lazy(() => import("./Pages/Website"));
 const ContactPage = lazy(() => import("./Pages/Contact"));
 const ProjectDetails = lazy(() => import("./components/ProjectDetail"));
 const WelcomeScreen = lazy(() => import("./Pages/WelcomeScreen"));
@@ -36,7 +36,7 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
 
           <Home />
           <Suspense fallback={<div className="h-20" />}>
-            <Portofolio />
+            <Website />
           </Suspense>
           <About />
           <Suspense fallback={<div className="h-20" />}>

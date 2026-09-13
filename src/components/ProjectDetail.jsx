@@ -1,117 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   ArrowLeft,
-  ExternalLink,
   Github,
   Code2,
   Star,
   ChevronRight,
   Layers,
-  Layout,
-  Globe,
-  Package,
-  Cpu,
-  Code,
+  CheckCircle2,
 } from "lucide-react";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 import { toSlug } from "../utils/slug";
+import { supabase } from "../supabase";
 
-const TECH_ICONS = {
-  React: Globe,
-  Tailwind: Layout,
-  Express: Cpu,
-  Python: Code,
-  Javascript: Code,
-  HTML: Code,
-  CSS: Code,
-  default: Package,
+const normalizeProject = (p) => {
+  if (!p) return null;
+  return {
+    id: p.id,
+    Title: p.Title || p.title || "Proyecto",
+    Description: p.Description || p.description || "",
+    Img: p.Img || p.img || "",
+    Link: p.Link || p.link || "",
+    Github: p.Github || p.github || "",
+    TechStack: p.TechStack || p.tech_stack || [],
+    Features: p.Features || p.features || [],
+  };
 };
 
-const TechBadge = ({ tech }) => {
-  const Icon = TECH_ICONS[tech] || TECH_ICONS["default"];
-  return (
-    <div className="group relative overflow-hidden px-3 py-2 md:px-4 md:py-2.5 bg-white/5 rounded-xl border border-white/10 hover:border-white/25 transition-all duration-300 cursor-default">
-      <div className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/0 group-hover:from-white/5 group-hover:to-white/5 transition-all duration-500" />
-      <div className="relative flex items-center gap-1.5 md:gap-2">
-        <Icon className="w-3.5 h-3.5 md:w-4 md:h-4 text-gray-300 group-hover:text-white transition-colors" />
-        <span className="text-xs md:text-sm font-medium text-gray-300 group-hover:text-white transition-colors">
-          {tech}
-        </span>
-      </div>
-    </div>
-  );
-};
-
-const FeatureItem = ({ feature }) => {
-  return (
-    <li className="group flex items-start space-x-3 p-2.5 md:p-3.5 rounded-xl hover:bg-white/5 transition-all duration-300 border border-transparent hover:border-white/10">
-      <div className="relative mt-2">
-        <div className="absolute -inset-1 bg-white/10 rounded-full blur group-hover:opacity-100 opacity-0 transition-opacity duration-300" />
-        <div className="relative w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-gradient-to-r from-neutral-300 to-white group-hover:scale-125 transition-transform duration-300" />
-      </div>
-      <span className="text-sm md:text-base text-gray-300 group-hover:text-white transition-colors">
-        {feature}
-      </span>
-    </li>
-  );
-};
-
-const ProjectStats = ({ project }) => {
-  const techStackCount = project?.TechStack?.length || 0;
-  const featuresCount = project?.Features?.length || 0;
-
-  return (
-    <div className="grid grid-cols-2 gap-3 md:gap-4 p-3 md:p-4 bg-black/40 rounded-xl overflow-hidden relative border border-white/10">
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent opacity-50 blur-2xl z-0" />
-      <div className="relative z-10 flex items-center space-x-2 md:space-x-3 bg-white/5 p-2 md:p-3 rounded-lg border border-white/10 transition-all duration-300 hover:scale-105 hover:border-white/25 hover:shadow-lg">
-        <div className="bg-white/10 p-1.5 md:p-2 rounded-full">
-          <Code2
-            className="text-gray-200 w-4 h-4 md:w-6 md:h-6"
-            strokeWidth={1.5}
-          />
-        </div>
-        <div className="flex-grow">
-          <div className="text-lg md:text-xl font-semibold text-white">
-            {techStackCount}
-          </div>
-          <div className="text-[10px] md:text-xs text-gray-400">
-            Total Teknologi
-          </div>
-        </div>
-      </div>
-
-      <div className="relative z-10 flex items-center space-x-2 md:space-x-3 bg-white/5 p-2 md:p-3 rounded-lg border border-white/10 transition-all duration-300 hover:scale-105 hover:border-white/25 hover:shadow-lg">
-        <div className="bg-white/10 p-1.5 md:p-2 rounded-full">
-          <Layers
-            className="text-gray-200 w-4 h-4 md:w-6 md:h-6"
-            strokeWidth={1.5}
-          />
-        </div>
-        <div className="flex-grow">
-          <div className="text-lg md:text-xl font-semibold text-white">
-            {featuresCount}
-          </div>
-          <div className="text-[10px] md:text-xs text-gray-400">
-            Fitur Utama
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const handleGithubClick = (githubLink) => {
-  if (githubLink === "Private") {
+const handleGithubClick = (githubLink, t) => {
+  if (githubLink === "Private" || !githubLink) {
     Swal.fire({
       icon: "info",
-      title: "Source Code Private",
-      text: "Maaf, source code untuk proyek ini bersifat privat.",
-      confirmButtonText: "Mengerti",
-      confirmButtonColor: "#3085d6",
-      background: "#030014",
-      color: "#ffffff",
+      title: t("projectDetail.privateRepoTitle"),
+      text: t("projectDetail.privateRepoDesc"),
+      confirmButtonText: t("projectDetail.understood"),
+      confirmButtonColor: "#0f172a",
+      background: "#ffffff",
+      color: "#0f172a",
+      customClass: {
+        popup: "rounded-2xl border border-slate-200 shadow-2xl",
+        confirmButton: "rounded-xl font-semibold px-6 py-2.5",
+      },
     });
     return false;
   }
@@ -121,60 +52,123 @@ const handleGithubClick = (githubLink) => {
 const ProjectDetails = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [project, setProject] = useState(null);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    const storedProjects = JSON.parse(localStorage.getItem("projects")) || [];
-    const selectedProject = storedProjects.find(
-      (p) => toSlug(p.Title) === slug,
-    );
+  const loadProject = useCallback(async () => {
+    setIsLoading(true);
+    setNotFound(false);
 
-    if (selectedProject) {
-      const enhancedProject = {
-        ...selectedProject,
-        Features: selectedProject.Features || [],
-        TechStack: selectedProject.TechStack || [],
-        Github: selectedProject.Github || "https://github.com/1Benji-1",
-      };
-      setProject(enhancedProject);
+    // 1. Intentar cargar desde localStorage (rápido y con soporte offline)
+    try {
+      const cached = localStorage.getItem("projects");
+      if (cached) {
+        const list = JSON.parse(cached);
+        if (Array.isArray(list)) {
+          const match = list.find((p) => {
+            const title = p.Title || p.title || "";
+            return toSlug(title) === slug;
+          });
+          if (match) {
+            setProject(normalizeProject(match));
+            setIsLoading(false);
+            return;
+          }
+        }
+      }
+    } catch (e) {
+      console.error("Error reading projects from cache:", e);
+    }
+
+    // 2. Si no se encontró en cache, consultar directamente a Supabase
+    try {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*");
+
+      if (error) throw error;
+
+      if (data && Array.isArray(data)) {
+        const match = data.find((p) => {
+          const title = p.title || p.Title || "";
+          return toSlug(title) === slug;
+        });
+
+        if (match) {
+          const norm = normalizeProject(match);
+          setProject(norm);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      setNotFound(true);
+    } catch (err) {
+      console.error("Error fetching project from Supabase:", err);
+      setNotFound(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [slug]);
 
-  if (!project) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    loadProject();
+  }, [loadProject]);
+
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center space-y-6 animate-fadeIn">
-          <div className="w-16 h-16 md:w-24 md:h-24 mx-auto border-4 border-white/10 border-t-white rounded-full animate-spin" />
-          <h2 className="text-xl md:text-3xl font-bold text-white">
-            Loading Project...
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 mx-auto border-4 border-slate-200 border-t-slate-900 rounded-full animate-spin" />
+          <h2 className="text-sm font-bold text-slate-700">
+            {t("projectDetail.loading")}
           </h2>
         </div>
       </div>
     );
   }
 
-  const projectUrl = `https://iscomrad.vercel.app/project/${toSlug(project.Title)}`;
+  if (notFound || !project) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="text-center max-w-md bg-white p-8 rounded-3xl border border-slate-200 shadow-xl space-y-4">
+          <h2 className="text-2xl font-bold text-slate-900">Proyecto no encontrado</h2>
+          <p className="text-sm text-slate-500 leading-relaxed">
+            No se pudo encontrar la información para el proyecto solicitado.
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={() => navigate("/")}
+              className="px-6 py-2.5 bg-slate-900 text-white rounded-xl font-semibold text-sm hover:bg-slate-800 transition-colors cursor-pointer"
+            >
+              {t("projectDetail.back")}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const projectUrl = `https://islumen.vercel.app/project/${toSlug(project.Title)}`;
 
   return (
     <>
       <Helmet>
-        <title>{project.Title} — Yoel Bulacia</title>
+        <title>{project.Title} — Lumen</title>
         <meta
           name="description"
           content={
             project.Description
               ? project.Description.slice(0, 155)
-              : `Project ${project.Title} Por Yoel Bulacia — Backend Developer.`
+              : `Proyecto ${project.Title} por Lumen — Tech Company.`
           }
         />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href={projectUrl} />
-        <meta
-          property="og:title"
-          content={`${project.Title} — Yoel Bulacia`}
-        />
+        <meta property="og:title" content={`${project.Title} — Lumen`} />
         <meta
           property="og:description"
           content={project.Description?.slice(0, 155)}
@@ -182,211 +176,168 @@ const ProjectDetails = () => {
         <meta property="og:url" content={projectUrl} />
         <meta property="og:type" content="website" />
         {project.Img && <meta property="og:image" content={project.Img} />}
-        <script type="application/ld+json">{`
-          {
-            "@context": "https://schema.org",
-            "@type": "CreativeWork",
-            "name": "${project.Title}",
-            "description": "${project.Description?.replace(/"/g, '\\"')}",
-            "url": "${projectUrl}",
-            "author": {
-              "@type": "Person",
-              "name": "Yoel Bulacia",
-              "url": "https://iscomrad.vercel.app"
-            }
-          }
-        `}</script>
       </Helmet>
 
-      <div className="min-h-screen bg-black px-[2%] sm:px-0 relative overflow-hidden">
-        <div className="fixed inset-0">
-          <div className="absolute -inset-[10px] opacity-20">
-            <div className="absolute top-0 -left-4 w-72 md:w-96 h-72 md:h-96 bg-neutral-500 rounded-full mix-blend-lighten filter blur-3xl opacity-40 animate-blob" />
-            <div className="absolute top-0 -right-4 w-72 md:w-96 h-72 md:h-96 bg-neutral-300 rounded-full mix-blend-lighten filter blur-3xl opacity-30 animate-blob animation-delay-2000" />
-            <div className="absolute -bottom-8 left-20 w-72 md:w-96 h-72 md:h-96 bg-white rounded-full mix-blend-lighten filter blur-3xl opacity-20 animate-blob animation-delay-4000" />
-          </div>
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
-        </div>
+      <div className="min-h-screen bg-slate-50 text-slate-900 py-8 md:py-14">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumb & Botón Volver */}
+          <div className="flex items-center justify-between gap-4 mb-8 md:mb-12 pb-5 border-b border-slate-200">
+            <button
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-slate-900 hover:text-white text-slate-800 rounded-xl border border-slate-200 hover:border-slate-900 shadow-xs hover:shadow-sm font-semibold text-sm transition-all duration-200 cursor-pointer group"
+            >
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+              <span>{t("projectDetail.back")}</span>
+            </button>
 
-        <div className="relative">
-          <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
-            <div className="flex items-center space-x-2 md:space-x-4 mb-8 md:mb-12 animate-fadeIn">
-              <button
-                onClick={() => navigate(-1)}
-                className="group inline-flex items-center space-x-1.5 md:space-x-2 px-3 md:px-5 py-2 md:py-2.5 bg-white/5 backdrop-blur-xl rounded-xl text-white/90 hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-white/20 text-sm md:text-base"
-              >
-                <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1 transition-transform" />
-                <span>Back</span>
-              </button>
-              <div className="flex items-center space-x-1 md:space-x-2 text-sm md:text-base text-white/50">
-                <span>Projects</span>
-                <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="text-white/90 truncate">{project.Title}</span>
-              </div>
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-400 font-medium truncate">
+              <Link to="/#Website" className="hover:text-slate-900 transition-colors">
+                {t("projectDetail.projects")}
+              </Link>
+              <ChevronRight className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-slate-900 font-bold truncate">
+                {project.Title}
+              </span>
             </div>
+          </div>
 
-            <div className="grid lg:grid-cols-2 gap-8 md:gap-16">
-              <div className="space-y-6 md:space-y-10 animate-slideInLeft">
-                <div className="space-y-4 md:space-y-6">
-                  <h1 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent leading-tight">
-                    {project.Title}
-                  </h1>
-                  <div className="relative h-1 w-16 md:w-24">
-                    <div className="absolute inset-0 bg-gradient-to-r from-neutral-500 to-white rounded-full animate-pulse" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-neutral-500 to-white rounded-full blur-sm" />
+          {/* Contenido Principal */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            {/* Columna Izquierda: Información del Proyecto (7 cols) */}
+            <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-900 bg-slate-200/80 border border-slate-300/80 px-3.5 py-1 rounded-full inline-block mb-3">
+                  Lumen Portfolio
+                </span>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                  {project.Title}
+                </h1>
+              </div>
+
+              <div>
+                <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal whitespace-pre-line">
+                  {project.Description}
+                </p>
+              </div>
+
+              {/* Estadísticas */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+                <div className="flex items-center gap-3 p-2">
+                  <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-900 shrink-0">
+                    <Code2 className="w-5 h-5" strokeWidth={1.75} />
+                  </div>
+                  <div>
+                    <div className="text-xl sm:text-2xl font-bold text-slate-900">
+                      {project.TechStack?.length || 0}
+                    </div>
+                    <div className="text-xs text-slate-500 font-medium">
+                      {t("projectDetail.technologies")}
+                    </div>
                   </div>
                 </div>
 
-                <div className="prose prose-invert max-w-none">
-                  <p className="text-base md:text-lg text-gray-300/90 leading-relaxed">
-                    {project.Description}
-                  </p>
+                <div className="flex items-center gap-3 p-2">
+                  <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-900 shrink-0">
+                    <Layers className="w-5 h-5" strokeWidth={1.75} />
+                  </div>
+                  <div>
+                    <div className="text-xl sm:text-2xl font-bold text-slate-900">
+                      {project.Features?.length || 0}
+                    </div>
+                    <div className="text-xs text-slate-500 font-medium">
+                      {t("projectDetail.keyFeatures")}
+                    </div>
+                  </div>
                 </div>
+              </div>
 
-                <ProjectStats project={project} />
-
-                <div className="flex flex-wrap gap-3 md:gap-4">
-                  <a
-                    href={project.Link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-8 py-2.5 md:py-4 bg-black border border-white/10 hover:border-white/25 text-gray-200 hover:text-white rounded-xl transition-all duration-300 backdrop-blur-xl overflow-hidden text-sm md:text-base"
-                  >
-                    <div className="absolute inset-0 translate-y-[100%] bg-gradient-to-r from-neutral-400/10 to-neutral-200/10 transition-transform duration-300 group-hover:translate-y-[0%]" />
-                    <ExternalLink className="relative w-4 h-4 md:w-5 md:h-5 group-hover:rotate-12 transition-transform" />
-                    <span className="relative font-medium">Live Demo</span>
-                  </a>
-
+              {/* Enlace Github / Código (NO Live Demo) */}
+              {project.Github && (
+                <div className="flex flex-wrap gap-3 pt-1">
                   <a
                     href={project.Github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-8 py-2.5 md:py-4 bg-transparent border border-white/10 hover:border-white/25 text-gray-300 hover:text-white rounded-xl transition-all duration-300 backdrop-blur-xl overflow-hidden text-sm md:text-base"
+                    className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
                     onClick={(e) =>
-                      !handleGithubClick(project.Github) && e.preventDefault()
+                      !handleGithubClick(project.Github, t) && e.preventDefault()
                     }
                   >
-                    <div className="absolute inset-0 translate-y-[100%] bg-gradient-to-r from-white/5 to-white/5 transition-transform duration-300 group-hover:translate-y-[0%]" />
-                    <Github className="relative w-4 h-4 md:w-5 md:h-5 group-hover:rotate-12 transition-transform" />
-                    <span className="relative font-medium">Github</span>
+                    <Github className="w-4 h-4" />
+                    <span>{t("projectDetail.viewCode")}</span>
                   </a>
                 </div>
+              )}
 
-                <div className="space-y-4 md:space-y-6">
-                  <h3 className="text-lg md:text-xl font-semibold text-white/90 mt-[3rem] md:mt-0 flex items-center gap-2 md:gap-3">
-                    <Code2 className="w-4 h-4 md:w-5 md:h-5 text-gray-300" />
-                    Technologies Used
-                  </h3>
-                  {project.TechStack.length > 0 ? (
-                    <div className="flex flex-wrap gap-2 md:gap-3">
-                      {project.TechStack.map((tech, index) => (
-                        <TechBadge key={index} tech={tech} />
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm md:text-base text-gray-400 opacity-50">
-                      No technologies added.
-                    </p>
-                  )}
-                </div>
+              {/* Tecnologías Utilizadas */}
+              <div className="space-y-3 pt-2">
+                <h3 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Code2 className="w-4 h-4 text-slate-900" />
+                  <span>{t("projectDetail.technologiesUsed")}</span>
+                </h3>
+
+                {project.TechStack && project.TechStack.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {project.TechStack.map((tech, index) => (
+                      <span
+                        key={index}
+                        className="px-3.5 py-1.5 bg-white border border-slate-200 text-slate-800 rounded-xl text-xs sm:text-sm font-semibold shadow-xs"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-400">
+                    {t("projectDetail.noTechnologies")}
+                  </p>
+                )}
               </div>
+            </div>
 
-              <div className="space-y-6 md:space-y-10 animate-slideInRight">
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Columna Derecha: Imagen del Proyecto & Funcionalidades Destacadas (5 cols) */}
+            <div className="lg:col-span-5 space-y-6">
+              {/* Contenedor de Imagen */}
+              {project.Img ? (
+                <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-lg">
                   <img
                     src={project.Img}
                     alt={project.Title}
-                    className="w-full object-cover transform transition-transform duration-700 will-change-transform group-hover:scale-105"
-                    onLoad={() => setIsImageLoaded(true)}
+                    className="w-full h-auto object-cover max-h-[460px]"
                   />
-                  <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/10 transition-colors duration-300 rounded-2xl" />
                 </div>
+              ) : null}
 
-                <div className="bg-white/[0.02] backdrop-blur-xl rounded-2xl p-8 border border-white/10 space-y-6 hover:border-white/20 transition-colors duration-300 group">
-                  <h3 className="text-xl font-semibold text-white/90 flex items-center gap-3">
-                    <Star className="w-5 h-5 text-white group-hover:rotate-[20deg] transition-transform duration-300" />
-                    Key Features
-                  </h3>
-                  {project.Features.length > 0 ? (
-                    <ul className="list-none space-y-2">
-                      {project.Features.map((feature, index) => (
-                        <FeatureItem key={index} feature={feature} />
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-400 opacity-50">
-                      No features added.
-                    </p>
-                  )}
-                </div>
+              {/* Funcionalidades Destacadas */}
+              <div className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2.5">
+                  <Star className="w-4 h-4 text-slate-900 fill-slate-900" />
+                  <span>{t("projectDetail.featuredCapabilities")}</span>
+                </h3>
+
+                {project.Features && project.Features.length > 0 ? (
+                  <ul className="space-y-3">
+                    {project.Features.map((feature, index) => (
+                      <li
+                        key={index}
+                        className="flex items-start gap-3 text-xs sm:text-sm text-slate-700 font-medium"
+                      >
+                        <div className="w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center shrink-0 mt-0.5">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                        </div>
+                        <span className="leading-relaxed">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-xs text-slate-400">
+                    {t("projectDetail.noFeatures")}
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
-
-        <style jsx>{`
-          @keyframes blob {
-            0% {
-              transform: translate(0px, 0px) scale(1);
-            }
-            33% {
-              transform: translate(30px, -50px) scale(1.1);
-            }
-            66% {
-              transform: translate(-20px, 20px) scale(0.9);
-            }
-            100% {
-              transform: translate(0px, 0px) scale(1);
-            }
-          }
-          .animate-blob {
-            animation: blob 10s infinite;
-          }
-          .animation-delay-2000 {
-            animation-delay: 2s;
-          }
-          .animation-delay-4000 {
-            animation-delay: 4s;
-          }
-          .animate-fadeIn {
-            animation: fadeIn 0.7s ease-out;
-          }
-          .animate-slideInLeft {
-            animation: slideInLeft 0.7s ease-out;
-          }
-          .animate-slideInRight {
-            animation: slideInRight 0.7s ease-out;
-          }
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-            }
-            to {
-              opacity: 1;
-            }
-          }
-          @keyframes slideInLeft {
-            from {
-              opacity: 0;
-              transform: translateX(-30px);
-            }
-            to {
-              opacity: 1;
-              transform: translateX(0);
-            }
-          }
-          @keyframes slideInRight {
-            from {
-              opacity: 0;
-              transform: translateX(30px);
-            }
-            to {
-              opacity: 1;
-              transform: translateX(0);
-            }
-          }
-        `}</style>
       </div>
     </>
   );
